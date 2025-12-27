@@ -143,4 +143,4 @@ For production, you will likely want to migrate to Postgres and add proper migra
 
 ## License
 
-Add a license if you want others to use or contribute to this project (MIT or Apache-2.0 are common).
+MIT License
