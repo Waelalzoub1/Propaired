@@ -133,19 +133,14 @@ For production, you will likely want to migrate to Postgres and add proper migra
 
 ## Recommended Next Improvements
 
-If you’re preparing this repo for employers/users:
-
-1. Add a `.env.example` (or `smtp.env.example`) and remove any real secrets from the repo history.
-2. Add automated formatting + linting:
-   - `ruff`, `black`
-3. Add a minimal test suite:
-   - `pytest` for database/auth helpers
-4. Containerize:
-   - `Dockerfile` + `docker-compose.yml` (optional)
-5. Add screenshots/GIFs of the UI flows (login, posting a job, chat).
+- Add `.env.example` files for `smtp.env` and `integrations.env` and ensure secrets are not committed
+- Add formatting/linting (e.g., `ruff` + `black`)
+- Add tests for core flows (auth/session, database helpers) using `pytest`
+- Add Docker support for consistent local setup (optional)
+- Add screenshots/GIFs of key flows (customer request, helper profile, chat)
 
 ---
 
 ## License
 
-Add a license if you intend others to use or contribute (MIT/Apache-2.0 are common).
+Add a license if you want others to use or contribute to this project (MIT or Apache-2.0 are common).
