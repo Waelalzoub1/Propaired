@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProHelper | Customer Profile</title>
+    <script>
+        (function() {
+            const match = document.cookie.match(/(?:^|; )theme=([^;]+)/);
+            const theme = match ? decodeURIComponent(match[1]) : "";
+            if (theme === "dark") {
+                document.documentElement.classList.add("dark");
+            }
+        })();
+    </script>
+    <style>
+        :root {
+            --primary: #667eea;
+            --accent: #764ba2;
+            --ink: #1f2430;
+            --muted: #6b7280;
+            --card: #ffffff;
+            --soft: #f4f6ff;
+            --border: #e0e7ff;
+            --danger: #e53e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--ink);
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 26px;
+            height: 3px;
+            background: #333;
+            border-radius: 999px;
+        }
+
+        .profile-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .profile-circle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+        }
+
+        .content {
+            max-width: 1240px;
+            margin: 2.5rem auto 4rem;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h1,
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+        }
+
+        .notice {
+            padding: 0.9rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .notice.success {
+            background: #e6fffa;
+            color: #1f6f5f;
+            border: 1px solid #b2f5ea;
+        }
+
+        .notice.error {
+            background: #fff5f5;
+            color: #b83232;
+            border: 1px solid #fed7d7;
+        }
+
+        .profile-summary {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+            padding: 1.2rem;
+            border-radius: 16px;
+            background: var(--soft);
+            margin-bottom: 2rem;
+        }
+
+        .profile-summary .avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .profile-summary p {
+            color: var(--muted);
+            margin-top: 0.3rem;
+        }
+
+        form {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        label {
+            font-weight: 600;
+        }
+
+        .field-help {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            margin-left: 0.4rem;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.18);
+            color: var(--primary);
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: help;
+        }
+
+        input,
+        select {
+            padding: 0.9rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            font-size: 1rem;
+            background: #ffffff;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-note {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .primary-btn {
+            padding: 0.9rem 1.6rem;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            width: fit-content;
+        }
+
+        .primary-btn:hover {
+            opacity: 0.95;
+        }
+
+        .logout-card {
+            display: grid;
+            gap: 0.8rem;
+            align-content: start;
+        }
+
+        .danger-btn {
+            padding: 0.9rem 1.6rem;
+            border-radius: 12px;
+            border: 1px solid rgba(229, 62, 62, 0.3);
+            background: rgba(229, 62, 62, 0.1);
+            color: var(--danger);
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .preference-card {
+            background: var(--soft);
+            border-radius: 16px;
+            padding: 1.2rem 1.4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .preference-card p {
+            margin-top: 0.35rem;
+            color: var(--muted);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 58px;
+            height: 32px;
+            min-width: 58px;
+            min-height: 32px;
+            flex-shrink: 0;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: linear-gradient(120deg, #dbe4ff, #c7d2fe);
+            transition: 0.2s;
+            border-radius: 999px;
+            box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.2);
+        }
+
+        .slider::before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 3px;
+            top: 3px;
+            background: white;
+            transition: 0.2s;
+            border-radius: 50%;
+            box-shadow: 0 6px 12px rgba(15, 23, 42, 0.2);
+        }
+
+        .switch input:checked + .slider {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+        }
+
+        .switch input:checked + .slider::before {
+            transform: translateX(26px);
+        }
+
+        html.dark {
+            --primary: #8aa2ff;
+            --accent: #4c6fff;
+            --ink: #e2e8f0;
+            --muted: #94a3b8;
+            --card: #111827;
+            --soft: rgba(148, 163, 184, 0.12);
+            --border: rgba(148, 163, 184, 0.35);
+            --danger: #f87171;
+        }
+
+        html.dark body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        html.dark nav {
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        html.dark .nav-links a {
+            color: var(--ink);
+        }
+
+        html.dark .hamburger span {
+            background: var(--ink);
+        }
+
+        html.dark .card {
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+        }
+
+        html.dark input,
+        html.dark select {
+            background: #0f172a;
+            color: var(--ink);
+            border-color: var(--border);
+        }
+
+        html.dark .slider {
+            background: linear-gradient(120deg, rgba(148, 163, 184, 0.3), rgba(148, 163, 184, 0.2));
+            box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.35);
+        }
+
+        html.dark .switch input:checked + .slider {
+            background: linear-gradient(135deg, #8aa2ff, #4c6fff);
+        }
+
+        @media (max-width: 900px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-container {
+                position: relative;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: calc(100% + 12px);
+                right: 0;
+                background: var(--card);
+                border-radius: 16px;
+                padding: 1rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+                box-shadow: 0 18px 40px rgba(15, 23, 42, 0.2);
+                opacity: 0;
+                transform: translateY(-10px);
+                pointer-events: none;
+                transition: all 0.2s ease;
+                z-index: 30;
+            }
+
+            .nav-links.active {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: all;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .content {
+                padding: 0 1.5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .nav-container {
+                padding: 0.75rem 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .nav-links {
+                left: 0;
+                right: 0;
+                width: 100%;
+            }
+
+            .nav-links a {
+                width: 100%;
+            }
+
+            .profile-circle {
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+
+            .content {
+                padding: 0 1rem;
+                margin: 1.5rem auto 2.5rem;
+                gap: 1.25rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+
+            .actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .actions button {
+                width: 100%;
+            }
+        }
+    
+        .field-help {
+            position: relative;
+            border: none;
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+            font-family: inherit;
+        }
+
+        .field-help::after {
+            content: attr(data-tip);
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 8px);
+            transform: translateX(-50%) translateY(4px);
+            background: rgba(15, 23, 42, 0.95);
+            color: #f8fafc;
+            padding: 0.45rem 0.6rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: normal;
+            width: max-content;
+            max-width: 240px;
+            text-align: left;
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 20;
+        }
+
+        .field-help:hover::after,
+        .field-help:focus::after,
+        .field-help:focus-visible::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        html.dark .field-help::after {
+            background: rgba(226, 232, 240, 0.95);
+            color: #0f172a;
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">ProHelper</div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/customers/home">Dashboard</a></li>
+                <li><a href="/customers/helpers">Find Helpers</a></li>
+                <li><a href="/customers/chats">Messages</a></li>
+                <li><a href="/legal">Legal</a></li>
+                <li>
+                    <a class="profile-circle active" href="/customers/profile" title="Customer Profile">
+                        {{ username[:1]|upper }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content">
+        <section class="card">
+            <h1>Profile settings</h1>
+            <p class="form-note">Update your display name or change your password. Your username stays the same.</p>
+
+            {% if message %}
+                <div class="notice success">{{ message }}</div>
+            {% endif %}
+            {% if error %}
+                <div class="notice error">{{ error }}</div>
+            {% endif %}
+
+            <div class="profile-summary">
+                <div class="avatar">{{ username[:1]|upper }}</div>
+                <div>
+                    <strong>{{ profile.full_name or 'Customer' }}</strong>
+                    <p>Username: {{ profile.username }}</p>
+                </div>
+            </div>
+
+            <h2>Preferences</h2>
+            <div class="preference-card">
+                <div>
+                    <strong>Dark mode <button type="button" class="field-help" data-tip="Use a darker theme on this device.">?</button></strong>
+                    <p>Switch to a darker theme for this device.</p>
+                </div>
+                <label class="switch">
+                    <input id="themeToggle" type="checkbox" aria-label="Toggle dark mode">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <form action="/customers/profile/display-name" method="post">
+                <label for="display_name">Display name <button type="button" class="field-help" data-tip="This name is shown to helpers.">?</button></label>
+                <input id="display_name" name="display_name" type="text" value="{{ profile.full_name or '' }}" placeholder="Enter your display name" required>
+                <span class="form-note">This is the name helpers will see.</span>
+                <button class="primary-btn" type="submit">Update display name</button>
+            </form>
+
+            <form action="/customers/profile/password" method="post">
+                <label for="current_password">Current password <button type="button" class="field-help" data-tip="Enter your current password to confirm changes.">?</button></label>
+                <input id="current_password" name="current_password" type="password" autocomplete="current-password" required>
+                <label for="new_password">New password <button type="button" class="field-help" data-tip="Choose a new password for your account.">?</button></label>
+                <input id="new_password" name="new_password" type="password" autocomplete="new-password" required>
+                <label for="confirm_password">Confirm new password <button type="button" class="field-help" data-tip="Re-enter the new password to confirm.">?</button></label>
+                <input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" required>
+                <button class="primary-btn" type="submit">Change password</button>
+            </form>
+        </section>
+
+        <section class="card logout-card">
+            <h2>Log out</h2>
+            <p class="form-note">Sign out on this device.</p>
+            <form action="/logout" method="post">
+                <button class="danger-btn" type="submit">Log out</button>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        const navLinks = document.getElementById('navLinks');
+        function toggleMenu() {
+            navLinks.classList.toggle('active');
+        }
+
+        document.addEventListener('click', (event) => {
+            if (!document.querySelector('nav').contains(event.target) && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        const themeToggle = document.getElementById('themeToggle');
+
+        function getThemeCookie() {
+            const match = document.cookie.match(/(?:^|; )theme=([^;]+)/);
+            return match ? decodeURIComponent(match[1]) : 'light';
+        }
+
+        function setThemeCookie(value) {
+            document.cookie = `theme=${encodeURIComponent(value)}; Path=/; Max-Age=31536000; SameSite=Lax`;
+        }
+
+        function applyTheme(theme) {
+            const isDark = theme === 'dark';
+            document.documentElement.classList.toggle('dark', isDark);
+            if (themeToggle) {
+                themeToggle.checked = isDark;
+            }
+        }
+
+        if (themeToggle) {
+            applyTheme(getThemeCookie());
+            themeToggle.addEventListener('change', () => {
+                const theme = themeToggle.checked ? 'dark' : 'light';
+                setThemeCookie(theme);
+                applyTheme(theme);
+            });
+        } else {
+            applyTheme(getThemeCookie());
+        }
+    </script>
+</body>
+</html>

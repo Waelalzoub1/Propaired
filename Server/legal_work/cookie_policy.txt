@@ -1,0 +1,14 @@
+TITLE: Cookie Policy
+EFFECTIVE_DATE:
+COMPANY_NAME:
+WEBSITE_URL:
+CONTACT_EMAIL:
+
+1. Cookies We Use
+- Session cookie, theme preference cookie.
+
+2. Why We Use Cookies
+- Authentication and user preferences.
+
+3. Managing Cookies
+- Browser settings note.

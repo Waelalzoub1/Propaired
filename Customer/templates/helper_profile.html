@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helper Profile</title>
+    <script>
+        (function() {
+            const match = document.cookie.match(/(?:^|; )theme=([^;]+)/);
+            const theme = match ? decodeURIComponent(match[1]) : "";
+            if (theme === "dark") {
+                document.documentElement.classList.add("dark");
+            }
+        })();
+    </script>
+    <style>
+        :root {
+            --primary: #667eea;
+            --accent: #764ba2;
+            --ink: #1f2a44;
+            --muted: #5f6b7c;
+            --card: #ffffff;
+            --soft: #f5f6ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 30px rgba(23, 43, 77, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .profile-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .profile-circle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 26px;
+            height: 3px;
+            background: var(--ink);
+            border-radius: 999px;
+        }
+
+        .page {
+            max-width: 1280px;
+            margin: 3rem auto 4rem;
+            padding: 0 1.5rem;
+            display: grid;
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(15, 23, 42, 0.15);
+            padding: 2rem;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 24px;
+            background: linear-gradient(160deg, var(--primary), var(--accent));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.6rem;
+        }
+
+        .hero h1 {
+            font-size: 2.1rem;
+        }
+
+        .hero p {
+            color: var(--muted);
+            margin-top: 0.4rem;
+        }
+
+        .pay-pill {
+            margin-top: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--soft);
+            color: var(--primary);
+            padding: 0.4rem 0.9rem;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            margin-top: 0.6rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-badge::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .status-badge.active {
+            background: rgba(34, 197, 94, 0.16);
+            color: #16a34a;
+        }
+
+        .status-badge.offline {
+            background: rgba(148, 163, 184, 0.25);
+            color: #64748b;
+        }
+
+        .status-badge.on-call {
+            background: rgba(245, 158, 11, 0.18);
+            color: #d97706;
+        }
+
+        .bg-flag {
+            color: #dc2626;
+            font-weight: 800;
+            letter-spacing: 0.2rem;
+            font-size: 0.8rem;
+        }
+
+        .bg-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bg-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #dc2626;
+        }
+
+        .verified-shield {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #16a34a;
+        }
+
+        .verified-shield svg {
+            width: 15px;
+            height: 15px;
+            fill: #ffffff;
+        }
+
+        .flash {
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            background: rgba(102, 126, 234, 0.12);
+            color: #3b4a80;
+            font-weight: 500;
+        }
+
+        .flash.error {
+            background: rgba(246, 71, 71, 0.15);
+            color: #c0392b;
+        }
+
+        h2 {
+            margin-bottom: 0.9rem;
+        }
+
+        .credential-list,
+        .review-list {
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .credential-item,
+        .review-item {
+            background: var(--soft);
+            border-radius: 16px;
+            padding: 0.9rem 1rem;
+        }
+
+        .credential-item strong {
+            display: block;
+        }
+
+        .review-meta {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-bottom: 0.4rem;
+        }
+
+        .field-help {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            margin-left: 0.4rem;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.18);
+            color: #4c5bd4;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: help;
+        }
+
+        .review-actions {
+            margin-top: 0.6rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .delete-btn {
+            border: 1px solid rgba(220, 38, 38, 0.4);
+            background: #ffffff;
+            color: #b91c1c;
+            padding: 0.45rem 0.9rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background: rgba(220, 38, 38, 0.08);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 16px;
+            cursor: zoom-in;
+        }
+
+        form {
+            display: grid;
+            gap: 0.9rem;
+        }
+
+        label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #777;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid rgba(31, 42, 68, 0.15);
+            padding: 0.8rem 1rem;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .primary-btn {
+            border: none;
+            border-radius: 14px;
+            padding: 0.85rem 1.4rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            justify-self: start;
+        }
+
+        .image-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            z-index: 100;
+        }
+
+        .image-modal.active {
+            display: flex;
+        }
+
+        .image-modal img {
+            max-width: 90vw;
+            max-height: 80vh;
+            border-radius: 18px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 24px;
+            right: 28px;
+            border: none;
+            background: white;
+            color: #1f2a44;
+            border-radius: 999px;
+            padding: 0.5rem 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        html.dark {
+            --primary: #8aa2ff;
+            --accent: #4c6fff;
+            --ink: #e2e8f0;
+            --muted: #94a3b8;
+            --card: #111827;
+            --soft: rgba(148, 163, 184, 0.12);
+        }
+
+        html.dark body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        html.dark nav {
+            background: rgba(15, 23, 42, 0.9);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        html.dark .nav-links a {
+            color: var(--ink);
+        }
+
+        html.dark .flash {
+            background: rgba(99, 102, 241, 0.2);
+            color: #e2e8f0;
+        }
+
+        html.dark .flash.error {
+            background: rgba(248, 113, 113, 0.2);
+            color: #fecaca;
+        }
+
+        html.dark .bg-flag {
+            color: #f87171;
+        }
+
+        html.dark .field-help {
+            background: rgba(148, 163, 184, 0.22);
+            color: #e2e8f0;
+        }
+
+        html.dark .delete-btn {
+            background: transparent;
+            border-color: rgba(248, 113, 113, 0.5);
+            color: #fecaca;
+        }
+
+        html.dark .delete-btn:hover {
+            background: rgba(248, 113, 113, 0.15);
+        }
+
+        html.dark .hamburger span {
+            background: #e2e8f0;
+        }
+
+        @media (max-width: 900px) {
+            .nav-container {
+                position: relative;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: calc(100% + 12px);
+                right: 0;
+                background: var(--card);
+                border-radius: 16px;
+                padding: 1rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+                box-shadow: 0 18px 40px rgba(15, 23, 42, 0.2);
+                opacity: 0;
+                transform: translateY(-10px);
+                pointer-events: none;
+                transition: all 0.2s ease;
+                z-index: 30;
+            }
+
+            .nav-links.active {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: all;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .nav-container {
+                padding: 0.75rem 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .nav-links {
+                left: 0;
+                right: 0;
+                width: 100%;
+            }
+
+            .nav-links a {
+                width: 100%;
+            }
+
+            .profile-circle {
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+
+            .page {
+                margin: 1.5rem auto 2.5rem;
+                padding: 0 1rem;
+                gap: 1.25rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+
+            .avatar {
+                width: 64px;
+                height: 64px;
+                border-radius: 18px;
+                font-size: 1.2rem;
+            }
+
+            .quick-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .quick-actions button {
+                width: 100%;
+            }
+
+            .review-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .review-actions button {
+                width: 100%;
+            }
+        }
+    
+        .field-help {
+            position: relative;
+            border: none;
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+            font-family: inherit;
+        }
+
+        .field-help::after {
+            content: attr(data-tip);
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 8px);
+            transform: translateX(-50%) translateY(4px);
+            background: rgba(15, 23, 42, 0.95);
+            color: #f8fafc;
+            padding: 0.45rem 0.6rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: normal;
+            width: max-content;
+            max-width: 240px;
+            text-align: left;
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 20;
+        }
+
+        .field-help:hover::after,
+        .field-help:focus::after,
+        .field-help:focus-visible::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        html.dark .field-help::after {
+            background: rgba(226, 232, 240, 0.95);
+            color: #0f172a;
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">ProHelper</div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/customers/home">Dashboard</a></li>
+                <li><a class="active" href="/customers/helpers">Find Helpers</a></li>
+                <li><a href="/customers/chats">Messages</a></li>
+                <li><a href="/legal">Legal</a></li>
+                <li>
+                    <a class="profile-circle" href="/customers/profile" title="Customer Profile">
+                        {{ username[:1]|upper }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="page">
+        {% if message %}
+        <div class="flash">{{ message }}</div>
+        {% endif %}
+        {% if error %}
+        <div class="flash error">{{ error }}</div>
+        {% endif %}
+
+        <section class="card hero">
+            <div class="avatar">{{ helper.username[:2]|upper }}</div>
+            <div>
+                {% if not background_verified %}
+                <div class="bg-flag">UNVERIFIED</div>
+                {% endif %}
+                <h1 class="bg-name">
+                    {% if not background_verified %}
+                    <span class="bg-dot" aria-hidden="true"></span>
+                    {% endif %}
+                    {{ helper.username }}
+                    {% if background_verified %}
+                    <span class="verified-shield" title="Background check on file">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 2l7 3v6c0 5-3.1 9.7-7 11-3.9-1.3-7-6-7-11V5l7-3zm-1 13l-3-3 1.4-1.4L11 12.2l4.6-4.6L17 9l-6 6z"></path>
+                        </svg>
+                    </span>
+                    {% endif %}
+                </h1>
+                <p>{{ helper.profession }}</p>
+                <div class="pay-pill">
+                    {{ helper.pay_type|replace('_', ' ') }} | ${{ '%.2f'|format(helper.pay_rate) }}
+                </div>
+                {% set availability = (helper.availability_status or 'active') %}
+                {% set status_label = 'On call' if availability == 'on_call' else availability|capitalize %}
+                <div class="status-badge {{ availability|replace('_', '-') }}">{{ status_label }}</div>
+                <p style="margin-top:1rem;">{{ helper.bio }}</p>
+                <p style="margin-top:0.6rem; color: var(--muted);">Average rating: {{ '%.1f'|format(average_rating) }}/5</p>
+                <p style="margin-top:0.4rem; color: var(--muted);">Completed jobs: {{ completed_jobs }}</p>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Credentials</h2>
+            <div class="credential-list">
+                {% for credential in credentials %}
+                <div class="credential-item">
+                    <strong>{{ credential.title }}</strong>
+                    <span>
+                        {% if credential.issuer %}{{ credential.issuer }}{% endif %}
+                        {% if credential.year %}{% if credential.issuer %} | {% endif %}{{ credential.year }}{% endif %}
+                    </span>
+                </div>
+                {% else %}
+                <div class="credential-item">
+                    <strong>No credentials listed yet.</strong>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Work gallery</h2>
+            <div class="gallery">
+                {% for image in images %}
+                <img src="{{ image.url }}" alt="Helper work sample">
+                {% else %}
+                <p style="color: var(--muted);">No work samples uploaded yet.</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Reviews</h2>
+            <div class="review-list">
+                {% for review in reviews %}
+                <div class="review-item">
+                    <div class="review-meta">
+                        {{ review.customer_username }} | Rating {{ review.rating }}/5
+                        {% if review.job_title %} • {{ review.job_title }}{% endif %}
+                    </div>
+                    <p>{{ review.review_text or 'No review text provided.' }}</p>
+                    {% if review.customer_username == username %}
+                    <div class="review-actions">
+                        <form method="post" action="/customers/helpers/{{ helper.username }}/reviews/{{ review.id }}/delete" onsubmit="return confirm('Delete this review?');">
+                            <button class="delete-btn" type="submit">Delete review</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="review-item">
+                    <p style="color: var(--muted);">No reviews yet. Be the first to leave one.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="card" id="leave-review">
+            <h2>Leave a review</h2>
+            {% if can_review %}
+                <form method="post" action="/customers/helpers/{{ helper.username }}/reviews">
+                    <div>
+                        <label for="job_id">Completed Job <button type="button" class="field-help" data-tip="Choose the completed job you are reviewing.">?</button></label>
+                        <select id="job_id" name="job_id" required>
+                            {% for job in review_jobs %}
+                            <option value="{{ job.id }}" {% if selected_job_id == job.id %}selected{% endif %}>
+                                {{ job.title }}{% if job.location %} • {{ job.location }}{% endif %}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="rating">Rating <button type="button" class="field-help" data-tip="Choose a rating from 1 to 5.">?</button></label>
+                        <select id="rating" name="rating" required>
+                            <option value="5">5 - Excellent</option>
+                            <option value="4">4 - Great</option>
+                            <option value="3">3 - Good</option>
+                            <option value="2">2 - Fair</option>
+                            <option value="1">1 - Needs work</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="review_text">Review <button type="button" class="field-help" data-tip="Share details about your experience.">?</button></label>
+                        <textarea id="review_text" name="review_text" placeholder="Share details about your experience."></textarea>
+                    </div>
+                    <button class="primary-btn" type="submit">Submit review</button>
+                </form>
+            {% else %}
+                <p style="color: var(--muted);">No completed jobs available for review yet.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <div class="image-modal" id="imageModal" aria-hidden="true">
+        <button class="modal-close" id="modalClose" type="button">Close</button>
+        <img id="modalImage" alt="Expanded work sample">
+    </div>
+
+    <script>
+        const navLinks = document.getElementById('navLinks');
+        function toggleMenu() {
+            navLinks.classList.toggle('active');
+        }
+
+        document.addEventListener('click', (event) => {
+            if (!document.querySelector('nav').contains(event.target) && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalClose = document.getElementById('modalClose');
+        const galleryImages = document.querySelectorAll('.gallery img');
+
+        function openModal(src) {
+            modalImage.src = src;
+            modal.classList.add('active');
+            modal.setAttribute('aria-hidden', 'false');
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
+            modalImage.src = '';
+        }
+
+        galleryImages.forEach((image) => {
+            image.addEventListener('click', () => openModal(image.src));
+        });
+
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

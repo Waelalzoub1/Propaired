@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | The Helper</title>
+    <script>
+        (function() {
+            const match = document.cookie.match(/(?:^|; )theme=([^;]+)/);
+            const theme = match ? decodeURIComponent(match[1]) : "";
+            if (theme === "dark") {
+                document.documentElement.classList.add("dark");
+            }
+        })();
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0e1f48 0%, #182c61 35%, #3c7abf 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            gap: 1.5rem;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            box-shadow: 0 30px 80px rgba(9, 16, 29, 0.45);
+            padding: 3rem;
+            width: 100%;
+            max-width: 520px;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            color: #0e1f48;
+            font-size: 2.2rem;
+            margin-bottom: 0.35rem;
+            letter-spacing: -0.5px;
+        }
+
+        .logo p {
+            color: #7080a0;
+            font-size: 1rem;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        h2 {
+            color: #0f172a;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 1.85rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.4rem;
+        }
+
+        .suggestion-wrap {
+            position: relative;
+        }
+
+        .suggestion-box {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 18px 36px rgba(9, 16, 29, 0.2);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            padding: 0.4rem;
+            display: none;
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .suggestion-box.active {
+            display: block;
+        }
+
+        .suggestion-item {
+            width: 100%;
+            border: none;
+            background: transparent;
+            text-align: left;
+            padding: 0.6rem 0.75rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            color: #1f2937;
+        }
+
+        .suggestion-item:hover,
+        .suggestion-item:focus-visible {
+            background: rgba(102, 126, 234, 0.12);
+        }
+
+        label {
+            display: block;
+            color: #4f5a72;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .field-help {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            margin-left: 0.4rem;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.18);
+            color: #4c5bd4;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: help;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"] {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 2px solid #dde1f0;
+            border-radius: 14px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f6f8ff;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #4299ff;
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(66, 153, 255, 0.2);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 2px solid #dde1f0;
+            border-radius: 14px;
+            font-size: 1rem;
+            min-height: 150px;
+            resize: vertical;
+            transition: all 0.3s ease;
+            background: #f6f8ff;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4299ff;
+            background: white;
+            box-shadow: 0 8px 20px rgba(66, 153, 255, 0.2);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #4299ff 0%, #6a5df2 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(72, 102, 235, 0.35);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #e2e8ff;
+        }
+
+        .divider span {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 0 1rem;
+            color: #9da8c3;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .switch-btn {
+            width: 100%;
+            padding: 0.9rem;
+            background: transparent;
+            color: #1f3a8a;
+            border: 2px solid #1f3a8a;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .switch-btn:hover {
+            background: #1f3a8a;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .switch-btn.secondary {
+            border-color: transparent;
+            background: rgba(31, 58, 138, 0.08);
+            color: #1f3a8a;
+        }
+
+        .switch-btn.secondary:hover {
+            background: rgba(31, 58, 138, 0.18);
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: 0.5rem;
+        }
+
+        .forgot-password a {
+            color: #4299ff;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .form-group.error input {
+            border-color: #e74c3c;
+            background: #fff6f6;
+        }
+
+        .error-message {
+            margin-top: 0.6rem;
+            color: #c0392b;
+            font-size: 0.9rem;
+        }
+
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stepper-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .stepper-item::after {
+            content: '';
+            position: absolute;
+            top: 18px;
+            right: -50%;
+            height: 2px;
+            width: 100%;
+            background: #e4e9fb;
+        }
+
+        .stepper-item:last-child::after {
+            display: none;
+        }
+
+        .stepper-item.active::after {
+            background: linear-gradient(135deg, #4299ff 0%, #6a5df2 100%);
+        }
+
+        .step-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #d5ddff;
+            color: #1f3a8a;
+            font-weight: 600;
+            background: white;
+            margin-bottom: 0.35rem;
+        }
+
+        .stepper-item.active .step-count {
+            background: linear-gradient(135deg, #4299ff 0%, #6a5df2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .step-label {
+            display: block;
+            font-size: 0.8rem;
+            letter-spacing: 0.02em;
+            color: #7a86a8;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .wizard-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .wizard-nav button {
+            flex: 1;
+        }
+
+        .wizard-nav .hidden {
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .chip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.85rem;
+        }
+
+        .chip-option {
+            border: 2px solid #dde1f0;
+            border-radius: 14px;
+            padding: 0.8rem 1rem;
+            text-align: center;
+            font-weight: 600;
+            color: #4f5a72;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chip-option:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(66, 153, 255, 0.35);
+        }
+
+        .chip-option.active {
+            border-color: transparent;
+            background: linear-gradient(135deg, #4299ff 0%, #6a5df2 100%);
+            color: white;
+            box-shadow: 0 8px 24px rgba(73, 105, 240, 0.35);
+        }
+
+        .pay-choices {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .pay-choices label {
+            flex: 1;
+            min-width: 140px;
+            cursor: pointer;
+        }
+
+        .pay-choices input {
+            display: none;
+        }
+
+        .pay-choices span {
+            display: block;
+            border: 2px solid #dde1f0;
+            border-radius: 14px;
+            padding: 0.8rem 1rem;
+            text-align: center;
+            font-weight: 500;
+            color: #4f5a72;
+            transition: all 0.3s ease;
+        }
+
+        .pay-choices input:checked + span {
+            border-color: transparent;
+            background: #edf1ff;
+            color: #1f3a8a;
+            box-shadow: inset 0 0 0 2px rgba(31, 58, 138, 0.25);
+        }
+
+        .helper-note {
+            font-size: 0.9rem;
+            color: #7a86a8;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 520px) {
+            .container {
+                padding: 2.2rem 1.6rem;
+            }
+
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .wizard-nav {
+                flex-direction: column;
+            }
+        }
+
+        html.dark body {
+            background: linear-gradient(135deg, #0f172a 0%, #111827 35%, #1e293b 100%);
+        }
+
+        html.dark .container {
+            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+        }
+
+        html.dark .logo h1,
+        html.dark h2 {
+            color: #e2e8f0;
+        }
+
+        html.dark .logo p,
+        html.dark label,
+        html.dark .helper-note,
+        html.dark .step-label {
+            color: #cbd5f5;
+        }
+
+        html.dark input[type="text"],
+        html.dark input[type="email"],
+        html.dark input[type="password"],
+        html.dark input[type="number"] {
+            background: #0f172a;
+            border-color: rgba(148, 163, 184, 0.4);
+            color: #e2e8f0;
+        }
+
+        html.dark .suggestion-box {
+            background: rgba(15, 23, 42, 0.98);
+            border-color: rgba(148, 163, 184, 0.35);
+            box-shadow: 0 18px 36px rgba(2, 6, 23, 0.6);
+        }
+
+        html.dark .suggestion-item {
+            color: #e2e8f0;
+        }
+
+        html.dark .suggestion-item:hover,
+        html.dark .suggestion-item:focus-visible {
+            background: rgba(148, 163, 184, 0.18);
+        }
+
+        html.dark .form-group.error input {
+            border-color: #f87171;
+            background: rgba(127, 29, 29, 0.25);
+        }
+
+        html.dark .chip-option {
+            border-color: rgba(148, 163, 184, 0.4);
+            color: #cbd5f5;
+        }
+
+        html.dark .pay-choices span {
+            border-color: rgba(148, 163, 184, 0.4);
+            color: #cbd5f5;
+        }
+
+        html.dark .pay-choices input:checked + span {
+            background: rgba(99, 102, 241, 0.2);
+            color: #e2e8f0;
+        }
+
+        html.dark .divider span {
+            background: #111827;
+            color: #cbd5f5;
+        }
+
+        html.dark .switch-btn.secondary {
+            background: rgba(99, 102, 241, 0.15);
+            color: #cbd5f5;
+        }
+
+        html.dark .field-help {
+            background: rgba(148, 163, 184, 0.22);
+            color: #e2e8f0;
+        }
+    
+        .field-help {
+            position: relative;
+            border: none;
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+            font-family: inherit;
+        }
+
+        .field-help::after {
+            content: attr(data-tip);
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 8px);
+            transform: translateX(-50%) translateY(4px);
+            background: rgba(15, 23, 42, 0.95);
+            color: #f8fafc;
+            padding: 0.45rem 0.6rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: normal;
+            width: max-content;
+            max-width: 240px;
+            text-align: left;
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 20;
+        }
+
+        .field-help:hover::after,
+        .field-help:focus::after,
+        .field-help:focus-visible::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        html.dark .field-help::after {
+            background: rgba(226, 232, 240, 0.95);
+            color: #0f172a;
+        }
+
+        .legal-footer {
+            text-align: center;
+            font-size: 0.85rem;
+            color: rgba(226, 232, 240, 0.6);
+        }
+
+        .legal-footer a {
+            color: rgba(226, 232, 240, 0.6);
+            text-decoration: underline;
+            text-decoration-color: rgba(148, 163, 184, 0.55);
+            text-underline-offset: 4px;
+        }
+
+        .legal-footer a:hover {
+            color: rgba(226, 232, 240, 0.85);
+        }
+
+        html.dark .legal-footer {
+            color: rgba(226, 232, 240, 0.7);
+        }
+
+        html.dark .legal-footer a {
+            color: rgba(226, 232, 240, 0.7);
+            text-decoration-color: rgba(148, 163, 184, 0.6);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>The Helper</h1>
+            <p>{{ login_notice | default("Welcome back!", true) }}</p>
+        </div>
+
+        <!-- Login Page -->
+        <div id="loginPage" class="page{% if start_page != 'signup' %} active{% endif %}">
+            <h2>Login</h2>
+            <form action="/helpers/login" method="post">
+                <div class="form-group">
+                    <label for="login-username">Username <button type="button" class="field-help" data-tip="Your helper account username.">?</button></label>
+                    <input type="text" id="login-username" name="username" value="{{ username | default('', true) }}" required>
+                </div>
+
+                <div class="form-group {% if highlight_error %}error{% endif %}">
+                    <label for="login-password">Password <button type="button" class="field-help" data-tip="Your helper account password.">?</button></label>
+                    <input type="password" id="login-password" name="password" required>
+                    <div class="forgot-password">
+                        <a href="/reset?role=helper">Forgot password?</a>
+                    </div>
+                    {% if error %}
+                    <p class="error-message">{{ error }}</p>
+                    {% endif %}
+                </div>
+
+                <input type="submit" value="Login" class="submit-btn">
+            </form>
+
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+            <button type="button" class="switch-btn" onclick="showPage('signup')">
+                Need an account? Sign up
+            </button>
+        </div>
+
+        <!-- Signup Page -->
+        <div id="signupPage" class="page{% if start_page == 'signup' %} active{% endif %}">
+            <h2>Become a Helper</h2>
+            {% if signup_error %}
+            <p class="error-message" style="text-align: center; margin-bottom: 1rem;">{{ signup_error }}</p>
+            {% endif %}
+
+            <div class="stepper" id="signupStepper">
+                <div class="stepper-item active" data-step="1">
+                    <span class="step-count">1</span>
+                    <span class="step-label">Account</span>
+                </div>
+                <div class="stepper-item" data-step="2">
+                    <span class="step-count">2</span>
+                    <span class="step-label">Profession</span>
+                </div>
+                <div class="stepper-item" data-step="3">
+                    <span class="step-count">3</span>
+                    <span class="step-label">Service Area</span>
+                </div>
+                <div class="stepper-item" data-step="4">
+                    <span class="step-count">4</span>
+                    <span class="step-label">Rates</span>
+                </div>
+                <div class="stepper-item" data-step="5">
+                    <span class="step-count">5</span>
+                    <span class="step-label">Bio</span>
+                </div>
+            </div>
+
+            <form id="signupForm" action="/helpers/signup" method="post" novalidate>
+                <div class="form-step active" data-step="1">
+                    <div class="form-group">
+                        <label for="signup-username">Choose a username <button type="button" class="field-help" data-tip="Pick a unique username for your helper profile.">?</button></label>
+                        <input type="text" id="signup-username" name="username" minlength="3" maxlength="30" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup-email">Email address <button type="button" class="field-help" data-tip="We send verification codes and updates here.">?</button></label>
+                        <input type="email" id="signup-email" name="email" placeholder="you@example.com" required>
+                        <p class="helper-note">We will send a verification code to this email.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup-password">Create a password <button type="button" class="field-help" data-tip="Create a password for your helper account.">?</button></label>
+                        <input type="password" id="signup-password" name="password" minlength="6" required>
+                        <p class="helper-note">Use at least 6 characters.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup-confirm-password">Confirm password <button type="button" class="field-help" data-tip="Re-enter the password to confirm.">?</button></label>
+                        <input type="password" id="signup-confirm-password" required>
+                    </div>
+                </div>
+
+                <div class="form-step" data-step="2">
+                    <div class="form-group">
+                        <label for="signup-profession">What kind of work do you do? <button type="button" class="field-help" data-tip="Describe your main service or trade.">?</button></label>
+                        <input
+                            type="text"
+                            id="signup-profession"
+                            name="profession"
+                            minlength="2"
+                            maxlength="35"
+                            pattern="[A-Za-z0-9 _-]{2,35}"
+                            placeholder="e.g. House Cleaning"
+                            autocomplete="off"
+                            required
+                        >
+                        <p class="helper-note">Use letters, numbers, spaces, underscores, or hyphens (max 35 characters).</p>
+                    </div>
+                    <div class="form-group">
+                        <label>Quick suggestions <button type="button" class="field-help" data-tip="Tap a suggestion to autofill your profession.">?</button></label>
+                        <div class="chip-grid">
+                            <button type="button" class="chip-option" data-profession-value="House Cleaning">House Cleaning</button>
+                            <button type="button" class="chip-option" data-profession-value="Child Care">Child Care</button>
+                            <button type="button" class="chip-option" data-profession-value="Repair Maintenance">Repair Maintenance</button>
+                            <button type="button" class="chip-option" data-profession-value="Errand Running">Errand Running</button>
+                            <button type="button" class="chip-option" data-profession-value="Meal Prep">Meal Prep</button>
+                            <button type="button" class="chip-option" data-profession-value="Personal Assistant">Personal Assistant</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-step" data-step="3">
+                    <div class="form-group">
+                        <label for="signup-location">Where do you work? <button type="button" class="field-help" data-tip="City and state where you want to accept jobs.">?</button></label>
+                        <div class="suggestion-wrap">
+                            <input type="text" id="signup-location" name="service_location" placeholder="City, ST" autocomplete="off" required>
+                            <div class="suggestion-box" id="signupLocationSuggestions"></div>
+                        </div>
+                        <p class="helper-note">We use your city to match you with nearby jobs.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-distance">Max travel distance (miles) <button type="button" class="field-help" data-tip="Farthest distance you are willing to travel.">?</button></label>
+                        <input type="number" id="signup-distance" name="max_distance_miles" min="1" max="500" step="1" value="25" required>
+                    </div>
+                </div>
+
+                <div class="form-step" data-step="4">
+                    <div class="form-group">
+                        <label>How do you charge? <button type="button" class="field-help" data-tip="Choose how you price your services.">?</button></label>
+                        <div class="pay-choices">
+                            <label>
+                                <input type="radio" name="pay_type" value="hourly" checked>
+                                <span>Per Hour</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="pay_type" value="per_job">
+                                <span>Per Job</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pay-rate">Typical rate (USD) <button type="button" class="field-help" data-tip="Typical amount you charge for this work.">?</button></label>
+                        <input type="number" id="pay-rate" name="pay_rate" min="1" step="1" inputmode="decimal" placeholder="e.g. 45" required>
+                        <p class="helper-note">Set an amount you feel good about. You can adjust it later.</p>
+                    </div>
+                </div>
+
+                <div class="form-step" data-step="5">
+                    <div class="form-group">
+                        <label for="helper-bio">Share a quick bio <button type="button" class="field-help" data-tip="Short summary customers will see on your profile.">?</button></label>
+                        <textarea id="helper-bio" name="bio" maxlength="400" placeholder="Tell customers what makes you an amazing helper." required></textarea>
+                        <p class="helper-note">Highlight experience, certifications, or what you enjoy.</p>
+                    </div>
+                </div>
+
+                <div class="wizard-nav">
+                    <button type="button" class="switch-btn secondary hidden" data-action="prev">Back</button>
+                    <button type="button" class="submit-btn" data-action="next">Next</button>
+                    <button type="submit" class="submit-btn hidden" data-action="submit">Create Profile</button>
+                </div>
+            </form>
+
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+            <button type="button" class="switch-btn" onclick="showPage('login')">
+                Already have an account? Login
+            </button>
+        </div>
+    </div>
+    <div class="legal-footer">
+        <a href="/legal/terms-of-service">Terms</a> •
+        <a href="/legal/privacy-policy">Privacy</a> •
+        <a href="/legal/cookie-policy">Cookies</a>
+    </div>
+
+    <script>
+        let signupWizardController = null;
+
+        function showPage(page) {
+            const loginPage = document.getElementById('loginPage');
+            const signupPage = document.getElementById('signupPage');
+            const logoText = document.querySelector('.logo p');
+
+            if (page === 'signup') {
+                loginPage.classList.remove('active');
+                signupPage.classList.add('active');
+                logoText.textContent = 'Build your helper profile';
+                if (signupWizardController) {
+                    signupWizardController.reset();
+                }
+            } else {
+                signupPage.classList.remove('active');
+                loginPage.classList.add('active');
+                logoText.textContent = 'Welcome back!';
+            }
+        }
+
+        function setupSignupWizard() {
+            const signupForm = document.getElementById('signupForm');
+            if (!signupForm) {
+                return;
+            }
+
+            const steps = Array.from(signupForm.querySelectorAll('.form-step'));
+            const stepperItems = Array.from(document.querySelectorAll('#signupStepper .stepper-item'));
+            const prevBtn = signupForm.querySelector('[data-action="prev"]');
+            const nextBtn = signupForm.querySelector('[data-action="next"]');
+            const submitBtn = signupForm.querySelector('[data-action="submit"]');
+            const confirmPassword = document.getElementById('signup-confirm-password');
+            const passwordField = document.getElementById('signup-password');
+            const professionInput = document.getElementById('signup-profession');
+            let currentStep = 0;
+
+            function toggleButtons(index) {
+                prevBtn.classList.toggle('hidden', index === 0);
+                nextBtn.classList.toggle('hidden', index === steps.length - 1);
+                submitBtn.classList.toggle('hidden', index !== steps.length - 1);
+            }
+
+            function showStep(index) {
+                steps.forEach((step, idx) => step.classList.toggle('active', idx === index));
+                stepperItems.forEach((item, idx) => item.classList.toggle('active', idx <= index));
+                currentStep = index;
+                toggleButtons(index);
+            }
+
+            function validateCurrentStep() {
+                const activeStep = steps[currentStep];
+                const fields = Array.from(activeStep.querySelectorAll('input, textarea'))
+                    .filter(field => field.name || field.id === 'signup-confirm-password');
+
+                if (activeStep.contains(confirmPassword) || currentStep > 0) {
+                    if (passwordField.value !== confirmPassword.value) {
+                        confirmPassword.setCustomValidity('Passwords must match');
+                    } else {
+                        confirmPassword.setCustomValidity('');
+                    }
+                }
+
+                for (const field of fields) {
+                    if (!field.reportValidity()) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            prevBtn.addEventListener('click', () => {
+                if (currentStep > 0) {
+                    showStep(currentStep - 1);
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (currentStep < steps.length - 1 && validateCurrentStep()) {
+                    showStep(currentStep + 1);
+                }
+            });
+
+            signupForm.addEventListener('submit', event => {
+                if (!validateCurrentStep()) {
+                    event.preventDefault();
+                }
+            });
+
+            signupForm.addEventListener('keydown', event => {
+                // Treat Enter as "Next" unless we're on the final step or typing in a textarea.
+                if (event.key !== 'Enter' || event.target.tagName === 'TEXTAREA') {
+                    return;
+                }
+                if (currentStep < steps.length - 1) {
+                    event.preventDefault();
+                    nextBtn.click();
+                }
+            });
+
+            signupWizardController = {
+                reset() {
+                    signupForm.reset();
+                    if (professionInput) {
+                        professionInput.dispatchEvent(new Event('input'));
+                    }
+                    showStep(0);
+                }
+            };
+
+            showStep(0);
+        }
+
+        function setupProfessionChips() {
+            const professionInput = document.getElementById('signup-profession');
+            if (!professionInput) {
+                return;
+            }
+
+            const chips = Array.from(document.querySelectorAll('[data-profession-value]'));
+
+            const syncActiveChip = value => {
+                chips.forEach(chip => {
+                    chip.classList.toggle('active', chip.dataset.professionValue === value);
+                });
+            };
+
+            chips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    const value = chip.dataset.professionValue || '';
+                    professionInput.value = value;
+                    syncActiveChip(value);
+                    professionInput.focus();
+                });
+            });
+
+            professionInput.addEventListener('input', () => {
+                syncActiveChip(professionInput.value);
+            });
+
+            professionInput.dispatchEvent(new Event('input'));
+        }
+
+        function setupLocationSuggestions() {
+            const locationInput = document.getElementById('signup-location');
+            const suggestionBox = document.getElementById('signupLocationSuggestions');
+            if (!locationInput || !suggestionBox) {
+                return;
+            }
+
+            let timer = null;
+
+            function renderSuggestionBox(items) {
+                suggestionBox.innerHTML = '';
+                if (!items.length) {
+                    suggestionBox.classList.remove('active');
+                    return;
+                }
+                items.forEach(item => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'suggestion-item';
+                    button.textContent = item;
+                    button.addEventListener('pointerdown', event => {
+                        event.preventDefault();
+                        locationInput.value = item;
+                        suggestionBox.classList.remove('active');
+                    });
+                    suggestionBox.appendChild(button);
+                });
+                suggestionBox.classList.add('active');
+            }
+
+            function updateSuggestions() {
+                const term = (locationInput.value || '').trim();
+                if (term.length < 2) {
+                    suggestionBox.classList.remove('active');
+                    return;
+                }
+                fetch(`/public/location-suggest?query=${encodeURIComponent(term)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const items = (data.suggestions || []).slice(0, 6);
+                        renderSuggestionBox(items);
+                    })
+                    .catch(() => {
+                        suggestionBox.classList.remove('active');
+                    });
+            }
+
+            locationInput.addEventListener('input', () => {
+                clearTimeout(timer);
+                timer = setTimeout(updateSuggestions, 300);
+            });
+
+            locationInput.addEventListener('focus', () => {
+                updateSuggestions();
+            });
+
+            document.addEventListener('click', event => {
+                if (!suggestionBox.contains(event.target) && event.target !== locationInput) {
+                    suggestionBox.classList.remove('active');
+                }
+            });
+        }
+
+        setupSignupWizard();
+        setupProfessionChips();
+        setupLocationSuggestions();
+
+        const initialPage = '{{ start_page | default("login", true) }}';
+        if (initialPage === 'signup') {
+            showPage('signup');
+        }
+    </script>
+</body>
+</html>

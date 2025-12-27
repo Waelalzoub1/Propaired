@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - The Helper</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", Arial, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+        .wrap {
+            max-width: 960px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 2.5rem;
+            box-shadow: 0 30px 60px rgba(15, 23, 42, 0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 2.1rem;
+        }
+
+        .note {
+            color: #475569;
+        }
+
+        .legal-content {
+            margin-top: 1.75rem;
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 1.5rem;
+            white-space: pre-wrap;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 0.95rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #0f172a;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="card">
+            <h1>{{ title }}</h1>
+            <p class="note">Draft text. Replace this content before launch.</p>
+            <div class="legal-content">{{ content }}</div>
+            <a class="back-link" href="/legal">Back to legal</a>
+        </div>
+    </div>
+</body>
+</html>

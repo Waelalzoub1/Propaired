@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProHelper - Find Professional Services</title>
+    <script>
+        (function() {
+            const match = document.cookie.match(/(?:^|; )theme=([^;]+)/);
+            const theme = match ? decodeURIComponent(match[1]) : "";
+            if (theme === "dark") {
+                document.documentElement.classList.add("dark");
+            }
+        })();
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .profile-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .profile-circle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+        }
+
+        .content {
+            max-width: 1280px;
+            margin: 4rem auto;
+            padding: 2rem;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Home Page Styles */
+        .hero {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .field-help {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.18);
+            color: #4c5bd4;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: help;
+            align-self: center;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+        }
+
+        .search-bar button {
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar .field-help {
+            padding: 0;
+            border: none;
+            background: rgba(102, 126, 234, 0.18);
+            color: #4c5bd4;
+            font-weight: 700;
+            box-shadow: none;
+        }
+
+        .search-bar button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Professionals Listing */
+        .professionals-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .professionals-section h2 {
+            color: #667eea;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .professional-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .professional-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .professional-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .professional-info {
+            flex: 1;
+        }
+
+        .professional-info h3 {
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+
+        .professional-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .professional-rating {
+            color: #ffa500;
+            font-size: 0.9rem;
+        }
+
+        .contact-btn {
+            padding: 0.5rem 1.5rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .contact-btn:hover {
+            background: #764ba2;
+        }
+
+        /* About & Contact Pages */
+        .info-page {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-page h1 {
+            color: #667eea;
+            margin-bottom: 2rem;
+        }
+
+        .info-page h2 {
+            color: #333;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-page p {
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .contact-icon {
+            font-size: 1.5rem;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 6px;
+        }
+
+        .hamburger span {
+            width: 26px;
+            height: 3px;
+            background: #333;
+            border-radius: 999px;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 900px) {
+            .nav-container {
+                position: relative;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: calc(100% + 12px);
+                right: 0;
+                left: auto;
+                flex-direction: column;
+                align-items: flex-start;
+                background: var(--card, rgba(255, 255, 255, 0.98));
+                padding: 1rem;
+                gap: 0.8rem;
+                border-radius: 16px;
+                box-shadow: 0 18px 40px rgba(15, 23, 42, 0.2);
+                transform: translateY(-10px);
+                opacity: 0;
+                pointer-events: none;
+                transition: all 0.2s ease;
+                z-index: 30;
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: all;
+            }
+
+            html.dark .nav-links {
+                background: var(--card, rgba(15, 23, 42, 0.95));
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .nav-container {
+                padding: 0.75rem 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .nav-links {
+                left: 0;
+                right: 0;
+                width: 100%;
+            }
+
+            .nav-links a {
+                width: 100%;
+            }
+
+            .profile-circle {
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+
+            .hero {
+                padding: 1.5rem;
+            }
+
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+
+            .professionals-section {
+                padding: 1.5rem;
+            }
+
+            .professional-card {
+                grid-template-columns: 1fr;
+                text-align: left;
+            }
+
+            .professional-card button {
+                width: 100%;
+            }
+        }
+
+        html.dark body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+        }
+
+        html.dark nav {
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        html.dark .logo {
+            color: #a5b4fc;
+        }
+
+        html.dark .nav-links a {
+            color: #e2e8f0;
+        }
+
+        html.dark .nav-links a:hover,
+        html.dark .nav-links a.active {
+            background: #4c6fff;
+        }
+
+        html.dark .hamburger span {
+            background: #e2e8f0;
+        }
+
+        html.dark .search-bar .field-help {
+            background: rgba(148, 163, 184, 0.22);
+            color: #e2e8f0;
+        }
+
+        html.dark .hero,
+        html.dark .professionals-section,
+        html.dark .info-page {
+            background: #111827;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        }
+
+        html.dark .hero h1,
+        html.dark .professionals-section h2,
+        html.dark .info-page h1 {
+            color: #e2e8f0;
+        }
+
+        html.dark .hero p,
+        html.dark .professional-info p,
+        html.dark .info-page p,
+        html.dark .contact-item {
+            color: rgba(226, 232, 240, 0.75);
+        }
+
+        html.dark .search-bar input {
+            background: #0f172a;
+            border-color: rgba(148, 163, 184, 0.4);
+            color: #e2e8f0;
+        }
+
+        html.dark .field-help {
+            background: rgba(148, 163, 184, 0.22);
+            color: #e2e8f0;
+        }
+
+        html.dark .professional-card,
+        html.dark .contact-info {
+            background: rgba(148, 163, 184, 0.12);
+        }
+    
+        .field-help {
+            position: relative;
+            border: none;
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+            font-family: inherit;
+        }
+
+        .field-help::after {
+            content: attr(data-tip);
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 8px);
+            transform: translateX(-50%) translateY(4px);
+            background: rgba(15, 23, 42, 0.95);
+            color: #f8fafc;
+            padding: 0.45rem 0.6rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: normal;
+            width: max-content;
+            max-width: 240px;
+            text-align: left;
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 20;
+        }
+
+        .field-help:hover::after,
+        .field-help:focus::after,
+        .field-help:focus-visible::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        html.dark .field-help::after {
+            background: rgba(226, 232, 240, 0.95);
+            color: #0f172a;
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">ProHelper</div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/helpers/home#home" class="active" onclick="showPage('home', event)">Dashboard</a></li>
+                <li><a href="/helpers/home#about" onclick="showPage('about', event)">About</a></li>
+                <li><a href="/helpers/home#contact" onclick="showPage('contact', event)">Contact</a></li>
+                <li><a href="/helpers/chats">Messages</a></li>
+                <li><a href="/legal">Legal</a></li>
+                <li>
+                    <a class="profile-circle" href="/helpers/profile" title="My Profile">
+                        {{ username[:1]|upper }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="hero">
+                <h1>Find more opportunities, fast</h1>
+                <p>Connect with local customers looking for your skills and services</p>
+                <div class="search-bar">
+                    <input id="searchInput" type="text" placeholder="Search for services...">
+                    <button type="button" class="field-help" data-tip="Search jobs by service or keyword.">?</button>
+                    <button id="searchButton" type="button">Search</button>
+                </div>
+            </div>
+
+            <div class="professionals-section">
+                <h2>Available Jobs</h2>
+                <div id="professionalsList"></div>
+            </div>
+        </div>
+
+        <!-- About Page -->
+        <div id="about" class="page">
+            <div class="info-page">
+                <h1>About ProHelper</h1>
+                <p>ProHelper is a platform for connecting homeowners with skilled professionals across a wide range of home services. We understand that finding reliable, qualified professionals can be challenging, which is why we've built a platform that prioritizes clarity, communication, and convenience.</p>
+                
+                <h2>Our Mission</h2>
+                <p>We're dedicated to making home services accessible and stress-free. Whether you need emergency repairs, routine maintenance, or major installations, ProHelper connects you with skilled professionals who are ready to help.</p>
+                
+                <h2>Why Choose ProHelper?</h2>
+                <p><strong>Skilled Professionals:</strong> Helpers share experience, portfolios, and credentials so customers can choose with confidence.</p>
+                
+                <p><strong>Transparent Pricing:</strong> See upfront pricing and get quotes before committing to any service. No hidden fees, no surprises.</p>
+                
+                <p><strong>Quality Focus:</strong> We encourage clear expectations, feedback, and follow-ups so issues get resolved quickly.</p>
+                
+                <p><strong>Easy Communication:</strong> Our platform makes it simple to communicate with professionals, schedule appointments, and track your service requests.</p>
+                
+                <h2>Our Services</h2>
+                <p>From plumbing and electrical work to HVAC maintenance, landscaping, locksmith services, and more – we cover all your home service needs. Our network of professionals is continuously growing to ensure you have access to the best local talent.</p>
+            </div>
+        </div>
+
+        <!-- Contact Page -->
+        <div id="contact" class="page">
+            <div class="info-page">
+                <h1>Contact Us</h1>
+                <p>Have questions or need assistance? We're here to help! Reach out to our support team and we'll get back to you as soon as possible.</p>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span class="contact-icon">📧</span>
+                        <div>
+                            <strong>Email</strong><br>
+                            support@prohelper.com
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">📞</span>
+                        <div>
+                            <strong>Phone</strong><br>
+                            1-800-PRO-HELP (776-4357)<br>
+                            Available Mon-Fri, 8AM-8PM EST
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">📍</span>
+                        <div>
+                            <strong>Office</strong><br>
+                            123 Service Street<br>
+                            Philadelphia, PA 19103
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">💬</span>
+                        <div>
+                            <strong>Live Chat</strong><br>
+                            Click the chat icon in the bottom right corner for instant support
+                        </div>
+                    </div>
+                </div>
+
+                <h2>For Professionals</h2>
+                <p>Interested in joining our network of trusted service providers? We're always looking for skilled professionals to join the ProHelper community. Email us at <strong>partners@prohelper.com</strong> to learn more about our partnership opportunities.</p>
+
+                <h2>Business Hours</h2>
+                <p>Customer Support: Monday - Friday, 8:00 AM - 8:00 PM EST<br>
+                Emergency Service Coordination: Available 24/7<br>
+                Office Hours: Monday - Friday, 9:00 AM - 5:00 PM EST</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const helperProfession = {{ (profile.profession if profile else '') | tojson }};
+
+        function showPage(pageId, evt) {
+            if (evt && typeof evt.preventDefault === 'function') {
+                evt.preventDefault();
+            }
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => link.classList.remove('active'));
+
+            const pageEl = document.getElementById(pageId);
+            if (pageEl) {
+                pageEl.classList.add('active');
+            }
+
+            const trigger = (evt && evt.target) || (window.event && window.event.target);
+            if (trigger) {
+                trigger.classList.add('active');
+            }
+
+            if (evt) {
+                window.location.hash = pageId;
+            }
+
+            document.getElementById('navLinks').classList.remove('active');
+        }
+
+        function handleHashNavigation() {
+            const hash = window.location.hash.replace('#', '');
+            if (!hash) {
+                return;
+            }
+            const section = document.getElementById(hash);
+            if (section && section.classList.contains('page')) {
+                const links = Array.from(document.querySelectorAll('.nav-links a'));
+                const navLink = links.find(link => link.getAttribute('href')?.endsWith(`#${hash}`));
+                showPage(hash, navLink ? { target: navLink } : undefined);
+            }
+        }
+
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+        }
+
+        document.addEventListener('click', (e) => {
+            const nav = document.querySelector('.nav-container');
+            const menu = document.getElementById('navLinks');
+            if (!nav.contains(e.target) && menu.classList.contains('active')) {
+                menu.classList.remove('active');
+            }
+        });
+
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const professionalsList = document.getElementById('professionalsList');
+        const resultsSection = document.querySelector('.professionals-section');
+
+        async function fetchJobs(keyword = '') {
+            try {
+                const params = new URLSearchParams();
+                if (keyword) {
+                    params.set('q', keyword);
+                }
+                if (helperProfession) {
+                    params.set('profession', helperProfession);
+                }
+                const queryString = params.toString();
+                const response = await fetch(`/helpers/api/jobs${queryString ? `?${queryString}` : ''}`, {
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Search failed');
+                }
+                const data = await response.json();
+                renderJobs(Array.isArray(data.jobs) ? data.jobs : []);
+                if (keyword && resultsSection) {
+                    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            } catch (error) {
+                console.error('Unable to load jobs', error);
+                professionalsList.innerHTML = '';
+            }
+        }
+
+        function renderJobs(jobs) {
+            professionalsList.innerHTML = '';
+            if (!jobs.length) {
+                const emptyState = document.createElement('div');
+                emptyState.className = 'professional-card';
+                emptyState.textContent = 'No jobs found for this search.';
+                professionalsList.appendChild(emptyState);
+                return;
+            }
+
+            jobs.forEach(job => {
+                professionalsList.appendChild(buildJobCard(job));
+            });
+        }
+
+        function buildJobCard(job) {
+            const card = document.createElement('div');
+            card.className = 'professional-card';
+            card.addEventListener('click', () => openJobDetail(job.id));
+
+            const avatar = document.createElement('div');
+            avatar.className = 'professional-avatar';
+            avatar.textContent = (job.title || '?').charAt(0).toUpperCase();
+
+            const info = document.createElement('div');
+            info.className = 'professional-info';
+
+            const heading = document.createElement('h3');
+            heading.textContent = job.title;
+
+            const subtext = document.createElement('p');
+            const details = [job.location || 'Remote', job.keywords].filter(Boolean).join(' • ');
+            subtext.textContent = details;
+
+            const budget = document.createElement('div');
+            budget.className = 'professional-rating';
+            budget.textContent = formatBudget(job);
+
+            info.appendChild(heading);
+            info.appendChild(subtext);
+            info.appendChild(budget);
+
+            const button = document.createElement('button');
+            button.className = 'contact-btn';
+            button.textContent = 'Contact';
+            button.addEventListener('click', (event) => {
+                event.stopPropagation();
+                openJobDetail(job.id);
+            });
+
+            card.appendChild(avatar);
+            card.appendChild(info);
+            card.appendChild(button);
+
+            return card;
+        }
+
+        function formatBudget(job) {
+            if (job.budget) {
+                return job.budget;
+            }
+            return 'Budget TBD';
+        }
+
+        function handleSearch(keywordOverride) {
+            const keyword = typeof keywordOverride === 'string' ? keywordOverride : (searchInput.value || '');
+            fetchJobs(keyword.trim());
+        }
+
+        function openJobDetail(jobId) {
+            if (!jobId) {
+                return;
+            }
+            window.location.href = `/helpers/job/${jobId}`;
+        }
+
+        if (searchButton) {
+            searchButton.addEventListener('click', () => handleSearch());
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('keydown', (evt) => {
+                if (evt.key === 'Enter') {
+                    evt.preventDefault();
+                    handleSearch();
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchJobs();
+            handleHashNavigation();
+        });
+
+        window.addEventListener('hashchange', handleHashNavigation);
+    </script>
+</body>
+</html>

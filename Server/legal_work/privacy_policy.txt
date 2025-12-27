@@ -1,0 +1,35 @@
+TITLE: Privacy Policy
+EFFECTIVE_DATE:
+COMPANY_NAME:
+WEBSITE_URL:
+CONTACT_EMAIL:
+
+1. Data We Collect
+- Account info, job details, chat content, device data.
+
+2. How We Use Data
+- Account management, safety, payments, support.
+
+3. Sharing
+- With helpers/customers, service providers, legal requests.
+
+4. Payments
+- Note Stripe handles payment data.
+
+5. Background Checks
+- Note Checkr handles applicant data.
+
+6. Data Retention
+- How long you keep account and chat data.
+
+7. Your Rights
+- Access, delete, update data.
+
+8. Cookies
+- Session cookies and preferences.
+
+9. Security
+- High-level security posture.
+
+10. Contact
+- Support info.

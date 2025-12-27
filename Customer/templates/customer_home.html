@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProHelper - Customer Dashboard</title>
+    <script>
+        (function() {
+            const match = document.cookie.match(/(?:^|; )theme=([^;]+)/);
+            const theme = match ? decodeURIComponent(match[1]) : "";
+            if (theme === "dark") {
+                document.documentElement.classList.add("dark");
+            }
+        })();
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .profile-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .dashboard {
+            max-width: 1280px;
+            margin: 3rem auto;
+            padding: 0 1.5rem 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #777;
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+
+        .field-help {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            margin-left: 0.4rem;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.18);
+            color: #4c5bd4;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: help;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            padding: 0.85rem 1rem;
+            margin-bottom: 1rem;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .location-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .suggestion-wrap {
+            position: relative;
+            flex: 1 1 240px;
+            min-width: 220px;
+        }
+
+        .location-row input {
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        .ghost-btn {
+            padding: 0.75rem 1.2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(102, 126, 234, 0.35);
+            background: rgba(102, 126, 234, 0.08);
+            color: #4a4a4a;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .ghost-btn:hover {
+            background: rgba(102, 126, 234, 0.16);
+        }
+
+        .location-status {
+            font-size: 0.9rem;
+            color: #667eea;
+            margin-top: 0.6rem;
+        }
+
+        .suggestion-box {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(102, 126, 234, 0.25);
+            border-radius: 12px;
+            box-shadow: 0 16px 30px rgba(102, 126, 234, 0.2);
+            padding: 0.35rem;
+            max-height: 220px;
+            overflow-y: auto;
+            display: none;
+            z-index: 5;
+        }
+
+        .suggestion-box.active {
+            display: block;
+        }
+
+        .suggestion-item {
+            width: 100%;
+            text-align: left;
+            border: none;
+            background: transparent;
+            padding: 0.55rem 0.7rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            color: #4a4a4a;
+            cursor: pointer;
+        }
+
+        .suggestion-item:hover,
+        .suggestion-item:focus {
+            background: rgba(102, 126, 234, 0.14);
+            outline: none;
+        }
+
+        button {
+            border: none;
+            border-radius: 12px;
+            padding: 0.85rem 1.4rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .jobs-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .job-row {
+            border: 1px solid #e7eaf3;
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            background: #ffffff;
+            color: #1f2430;
+        }
+
+        .job-row header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-pill {
+            padding: 0.3rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .job-meta {
+            color: #64748b;
+        }
+
+        .job-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .secondary-btn {
+            background: white;
+            border: 1px solid #e0e0e0;
+            color: #555;
+        }
+
+        .danger-btn {
+            background: rgba(246, 71, 71, 0.15);
+            color: #c0392b;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 6px;
+        }
+
+        .hamburger span {
+            width: 26px;
+            height: 3px;
+            background: #333;
+            border-radius: 999px;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .nav-container {
+                position: relative;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: calc(100% + 12px);
+                right: 0;
+                left: auto;
+                flex-direction: column;
+                align-items: flex-start;
+                background: var(--card, rgba(255, 255, 255, 0.98));
+                padding: 1rem;
+                gap: 0.8rem;
+                border-radius: 16px;
+                box-shadow: 0 18px 40px rgba(15, 23, 42, 0.2);
+                transform: translateY(-10px);
+                opacity: 0;
+                pointer-events: none;
+                transition: all 0.2s ease;
+                z-index: 30;
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: all;
+            }
+
+            html.dark .nav-links {
+                background: var(--card, rgba(15, 23, 42, 0.95));
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .nav-container {
+                padding: 0.75rem 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .nav-links {
+                left: 0;
+                right: 0;
+                width: 100%;
+            }
+
+            .nav-links a {
+                width: 100%;
+            }
+
+            .profile-circle {
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+
+            .dashboard {
+                margin: 1.5rem auto 2.5rem;
+                padding: 0 1rem 2.5rem;
+                gap: 1.25rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .location-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .ghost-btn {
+                width: 100%;
+            }
+
+            .job-row {
+                padding: 1.1rem;
+            }
+
+            .job-row header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .job-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .job-actions button {
+                width: 100%;
+            }
+        }
+
+        html.dark body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+        }
+
+        html.dark nav {
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        html.dark .logo {
+            color: #a5b4fc;
+        }
+
+        html.dark .nav-links a {
+            color: #e2e8f0;
+        }
+
+        html.dark .hamburger span {
+            background: #e2e8f0;
+        }
+
+        html.dark .card {
+            background: #111827;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        html.dark h1 {
+            color: #e2e8f0;
+        }
+
+        html.dark label,
+        html.dark p,
+        html.dark .job-item {
+            color: rgba(226, 232, 240, 0.75);
+        }
+
+        html.dark input,
+        html.dark textarea {
+            background: #0f172a;
+            border-color: rgba(148, 163, 184, 0.4);
+            color: #e2e8f0;
+        }
+
+        html.dark .ghost-btn {
+            border-color: rgba(148, 163, 184, 0.4);
+            background: rgba(148, 163, 184, 0.12);
+            color: #e2e8f0;
+        }
+
+        html.dark .location-status {
+            color: #a5b4fc;
+        }
+
+        html.dark .suggestion-box {
+            background: rgba(15, 23, 42, 0.95);
+            border-color: rgba(148, 163, 184, 0.35);
+            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.4);
+        }
+
+        html.dark .suggestion-item {
+            color: #e2e8f0;
+        }
+
+        html.dark .suggestion-item:hover,
+        html.dark .suggestion-item:focus {
+            background: rgba(148, 163, 184, 0.18);
+        }
+
+        html.dark .job-row {
+            background: #0f172a;
+            border-color: rgba(148, 163, 184, 0.2);
+            color: #e2e8f0;
+        }
+
+        html.dark .job-row p {
+            color: rgba(226, 232, 240, 0.8);
+        }
+
+        html.dark .status-pill {
+            background: rgba(99, 102, 241, 0.2);
+            color: #c7d2fe;
+        }
+
+        html.dark .secondary-btn {
+            background: rgba(148, 163, 184, 0.16);
+            border-color: rgba(148, 163, 184, 0.3);
+            color: #e2e8f0;
+        }
+
+        html.dark .field-help {
+            background: rgba(148, 163, 184, 0.22);
+            color: #e2e8f0;
+        }
+
+        html.dark .danger-btn {
+            background: rgba(248, 113, 113, 0.2);
+            color: #fecaca;
+        }
+    
+        .field-help {
+            position: relative;
+            border: none;
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+            font-family: inherit;
+        }
+
+        .field-help::after {
+            content: attr(data-tip);
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 8px);
+            transform: translateX(-50%) translateY(4px);
+            background: rgba(15, 23, 42, 0.95);
+            color: #f8fafc;
+            padding: 0.45rem 0.6rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: normal;
+            width: max-content;
+            max-width: 240px;
+            text-align: left;
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 20;
+        }
+
+        .field-help:hover::after,
+        .field-help:focus::after,
+        .field-help:focus-visible::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        html.dark .field-help::after {
+            background: rgba(226, 232, 240, 0.95);
+            color: #0f172a;
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">ProHelper</div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a class="active" href="/customers/home">Dashboard</a></li>
+                <li><a href="/customers/helpers">Find Helpers</a></li>
+                <li><a href="/customers/chats">Messages</a></li>
+                <li><a href="/legal">Legal</a></li>
+                <li>
+                    <a class="profile-circle" href="/customers/profile" title="Customer Profile">
+                        {{ username[:1]|upper }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <div class="card">
+            <h1>Create a job</h1>
+            <form id="jobForm">
+                <div>
+                    <label for="title">Job Title <button type="button" class="field-help" data-tip="Give this job a short, clear title.">?</button></label>
+                    <input id="title" name="title" type="text" placeholder="e.g. Emergency plumbing repair" required>
+                </div>
+                <div>
+                    <label for="description">Description <button type="button" class="field-help" data-tip="Describe the work and any timing details.">?</button></label>
+                    <textarea id="description" name="description" placeholder="Describe the work scope" required></textarea>
+                </div>
+                <div>
+                    <label for="keywords">Keywords <button type="button" class="field-help" data-tip="Add a few keywords to help helpers find this job.">?</button></label>
+                    <input id="keywords" name="keywords" type="text" placeholder="plumbing, emergency">
+                </div>
+                <div>
+                    <label for="budget">Budget <button type="button" class="field-help" data-tip="Share a target budget range if you have one.">?</button></label>
+                    <input id="budget" name="budget" type="text" placeholder="$250 - $400">
+                </div>
+                <div>
+                    <label for="location">Location <button type="button" class="field-help" data-tip="Enter the city and state for this job.">?</button></label>
+                    <div class="location-row">
+                        <button class="ghost-btn" type="button" id="autoLocation">Use my location</button>
+                        <div class="suggestion-wrap">
+                            <input id="location" name="location" type="text" placeholder="Philadelphia, PA or Remote">
+                            <div class="suggestion-box" id="customerLocationSuggestions"></div>
+                        </div>
+                    </div>
+                    <div id="locationStatus" class="location-status"></div>
+                </div>
+                <button class="primary-btn" type="submit">Post Job</button>
+                <div id="jobStatus" style="margin-top:1rem;color:#667eea;font-weight:500;"></div>
+            </form>
+        </div>
+        <div class="card">
+            <h1>Your jobs</h1>
+            <div id="jobsList" class="jobs-list"></div>
+        </div>
+    </div>
+
+    <script>
+        const navLinks = document.getElementById('navLinks');
+        function toggleMenu() {
+            navLinks.classList.toggle('active');
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!document.querySelector('.nav-container').contains(e.target) && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        const jobForm = document.getElementById('jobForm');
+        const jobStatus = document.getElementById('jobStatus');
+        const jobsList = document.getElementById('jobsList');
+        const locationInput = document.getElementById('location');
+        const locationButton = document.getElementById('autoLocation');
+        const locationStatus = document.getElementById('locationStatus');
+        const locationSuggestions = document.getElementById('customerLocationSuggestions');
+
+        async function loadJobs() {
+            try {
+                const response = await fetch('/customers/api/jobs', {
+                    credentials: 'include',
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (!response.ok) {
+                    throw new Error('Unable to load jobs');
+                }
+                const payload = await response.json();
+                renderJobs(Array.isArray(payload.jobs) ? payload.jobs : []);
+            } catch (error) {
+                console.error(error);
+                jobsList.innerHTML = '<div class="job-row">Unable to load jobs.</div>';
+            }
+        }
+
+        function renderJobs(jobs) {
+            jobsList.innerHTML = '';
+            if (!jobs.length) {
+                jobsList.innerHTML = '<div class="job-row">No jobs yet. Create one to get started.</div>';
+                return;
+            }
+            jobs.forEach(job => {
+                jobsList.appendChild(buildJobRow(job));
+            });
+        }
+
+        function buildJobRow(job) {
+            const row = document.createElement('div');
+            row.className = 'job-row';
+
+            const header = document.createElement('header');
+            const title = document.createElement('h3');
+            title.textContent = job.title;
+            const status = document.createElement('span');
+            status.className = 'status-pill';
+            if (job.status === 'closed') {
+                status.textContent = 'COMPLETED';
+            } else if (job.status === 'pending_completion') {
+                status.textContent = 'AWAITING CONFIRMATION';
+            } else {
+                status.textContent = 'OPEN';
+            }
+            header.appendChild(title);
+            header.appendChild(status);
+
+            const description = document.createElement('p');
+            description.textContent = job.description;
+
+            const meta = document.createElement('p');
+            meta.className = 'job-meta';
+            meta.textContent = [job.budget || 'Budget TBD', job.location || 'Remote'].filter(Boolean).join(' • ');
+
+            const actions = document.createElement('div');
+            actions.className = 'job-actions';
+
+            if (job.status === 'open') {
+                const closeBtn = document.createElement('button');
+                closeBtn.className = 'secondary-btn';
+                closeBtn.textContent = 'Mark Filled';
+                closeBtn.addEventListener('click', () => updateJobStatus(job.id));
+                actions.appendChild(closeBtn);
+            }
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'danger-btn';
+            deleteBtn.textContent = 'Delete';
+            deleteBtn.addEventListener('click', () => deleteJob(job.id));
+            actions.appendChild(deleteBtn);
+
+            row.appendChild(header);
+            row.appendChild(description);
+            row.appendChild(meta);
+            row.appendChild(actions);
+            return row;
+        }
+
+        if (jobForm) {
+            jobForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const payload = {
+                    title: jobForm.title.value,
+                    description: jobForm.description.value,
+                    keywords: jobForm.keywords.value,
+                    budget: jobForm.budget.value,
+                    location: jobForm.location.value
+                };
+                try {
+                    const response = await fetch('/customers/api/jobs', {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) {
+                        throw new Error('Unable to create job');
+                    }
+                    const data = await response.json();
+                    jobForm.reset();
+                    if (data && data.first_job) {
+                        window.location.href = '/customers/job-posted';
+                        return;
+                    }
+                    jobStatus.textContent = 'Job posted successfully';
+                    jobStatus.style.color = '#2ecc71';
+                    loadJobs();
+                } catch (error) {
+                    jobStatus.textContent = 'Unable to post job.';
+                    jobStatus.style.color = '#c0392b';
+                    console.error(error);
+                }
+            });
+        }
+
+        if (locationButton && locationInput) {
+            locationButton.addEventListener('click', () => {
+                if (!navigator.geolocation) {
+                    locationStatus.textContent = 'Location is not supported by this browser.';
+                    return;
+                }
+                const hostname = window.location.hostname;
+                const isLocalhost = ['localhost', '127.0.0.1', '127.0.1.1', '0.0.0.0', '::1'].includes(hostname);
+                if (!window.isSecureContext && !isLocalhost) {
+                    locationStatus.textContent = 'Location access requires HTTPS or http://localhost. Enter your location manually.';
+                    return;
+                }
+                const options = { enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 };
+
+                const handlePosition = async (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    const fallbackLocation = `Lat ${latitude.toFixed(5)}, Lng ${longitude.toFixed(5)}`;
+                    try {
+                        const response = await fetch(`/public/reverse-geocode?lat=${latitude}&lon=${longitude}`);
+                        if (!response.ok) {
+                            throw new Error('Reverse geocoding failed');
+                        }
+                        const data = await response.json();
+                        locationInput.value = data.location || fallbackLocation;
+                        locationStatus.textContent = 'Location added.';
+                    } catch (error) {
+                        locationInput.value = fallbackLocation;
+                        locationStatus.textContent = 'Location added.';
+                    } finally {
+                        locationButton.disabled = false;
+                    }
+                };
+
+                const requestPosition = () => new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, options);
+                });
+
+                const tryLocation = async (attempt = 0) => {
+                    locationStatus.textContent = 'Finding your location...';
+                    locationButton.disabled = true;
+                    try {
+                        const position = await requestPosition();
+                        await handlePosition(position);
+                    } catch (error) {
+                        if (error && error.code === 1 && navigator.permissions && navigator.permissions.query) {
+                            try {
+                                const status = await navigator.permissions.query({ name: 'geolocation' });
+                                if (status.state === 'granted') {
+                                    const retry = await requestPosition();
+                                    await handlePosition(retry);
+                                    return;
+                                }
+                                if (status.state === 'prompt') {
+                                    locationStatus.textContent = 'Allow location access in the prompt to continue.';
+                                    locationButton.disabled = false;
+                                    status.onchange = async () => {
+                                        if (status.state === 'granted') {
+                                            tryLocation();
+                                        }
+                                    };
+                                    return;
+                                }
+                            } catch (permissionError) {
+                                // Fall through to generic message.
+                            }
+                        }
+                        if (error && error.code === 1) {
+                            locationStatus.textContent = 'Location access was blocked by your browser settings.';
+                        } else {
+                            if (attempt < 2) {
+                                setTimeout(() => {
+                                    tryLocation(attempt + 1);
+                                }, 500);
+                                return;
+                            }
+                            locationStatus.textContent = 'Unable to access your location.';
+                        }
+                        locationButton.disabled = false;
+                    }
+                };
+
+                const runLocationRequest = async () => {
+                    if (navigator.permissions && navigator.permissions.query) {
+                        try {
+                            const status = await navigator.permissions.query({ name: 'geolocation' });
+                            if (status.state === 'denied') {
+                                locationStatus.textContent = 'Location access was blocked by your browser settings.';
+                                return;
+                            }
+                            if (status.state === 'prompt') {
+                                status.onchange = () => {
+                                    if (status.state === 'granted') {
+                                        tryLocation();
+                                    }
+                                };
+                            }
+                        } catch (permissionError) {
+                            // Ignore and continue to request location.
+                        }
+                    }
+                    tryLocation();
+                };
+
+                runLocationRequest();
+            });
+        }
+
+        function renderSuggestionBox(box, items, onSelect) {
+            if (!box) return;
+            box.innerHTML = '';
+            if (!items.length) {
+                box.classList.remove('active');
+                return;
+            }
+            items.forEach((item) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'suggestion-item';
+                button.textContent = item;
+                button.addEventListener('pointerdown', (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    onSelect(item);
+                    box.classList.remove('active');
+                });
+                box.appendChild(button);
+            });
+            box.classList.add('active');
+        }
+
+        function updateLocationSuggestions(value) {
+            if (!locationSuggestions) return;
+            const term = (value || '').trim();
+            if (term.length < 2) {
+                locationSuggestions.classList.remove('active');
+                return;
+            }
+            fetch(`/public/location-suggest?query=${encodeURIComponent(term)}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    const items = (data.suggestions || []).slice(0, 6);
+                    renderSuggestionBox(locationSuggestions, items, (selection) => {
+                        locationInput.value = selection;
+                    });
+                })
+                .catch(() => {
+                    locationSuggestions.classList.remove('active');
+                });
+        }
+
+        let locationTimer = null;
+        if (locationInput) {
+            locationInput.addEventListener('input', () => {
+                clearTimeout(locationTimer);
+                locationTimer = setTimeout(() => {
+                    updateLocationSuggestions(locationInput.value.trim());
+                }, 350);
+            });
+            locationInput.addEventListener('focus', () => {
+                updateLocationSuggestions(locationInput.value.trim());
+            });
+        }
+
+        document.addEventListener('click', (event) => {
+            const target = event.target;
+            if (locationSuggestions && locationInput) {
+                if (target !== locationInput && !locationSuggestions.contains(target)) {
+                    locationSuggestions.classList.remove('active');
+                }
+            }
+        });
+
+        async function updateJobStatus(jobId) {
+            try {
+                const response = await fetch(`/customers/api/jobs/${jobId}/close`, {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                if (!response.ok) {
+                    let message = 'Unable to update job.';
+                    try {
+                        const data = await response.json();
+                        if (data && data.detail) {
+                            message = data.detail;
+                        }
+                    } catch (error) {
+                        console.error(error);
+                    }
+                    throw new Error(message);
+                }
+                loadJobs();
+            } catch (error) {
+                console.error(error);
+                alert(error.message || 'Unable to update job.');
+            }
+        }
+
+        async function deleteJob(jobId) {
+            try {
+                const response = await fetch(`/customers/api/jobs/${jobId}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+                if (!response.ok) {
+                    throw new Error('Unable to delete job');
+                }
+                loadJobs();
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        loadJobs();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Helper | Home</title>
+    <script>
+        (function() {
+            const match = document.cookie.match(/(?:^|; )theme=([^;]+)/);
+            const theme = match ? decodeURIComponent(match[1]) : "";
+            if (theme === "dark") {
+                document.documentElement.classList.add("dark");
+            }
+        })();
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+        :root {
+            --ink: #0b1324;
+            --navy: #0e1f48;
+            --ocean: #1f5fa3;
+            --sky: #7fc0ff;
+            --mint: #8fe3c7;
+            --sun: #ffcf7a;
+            --card: rgba(255, 255, 255, 0.9);
+            --shadow: 0 24px 60px rgba(8, 20, 45, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(circle at top left, #e6f4ff 0%, #cde5ff 30%, #95c2ff 55%, #1b4c8b 100%);
+            color: var(--ink);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .background-orbs {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.55;
+            filter: blur(0px);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .orb.one {
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, #9ae7ff 0%, rgba(154, 231, 255, 0) 70%);
+            top: -120px;
+            right: 5%;
+            animation-delay: 0s;
+        }
+
+        .orb.two {
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, #ffd8a8 0%, rgba(255, 216, 168, 0) 70%);
+            bottom: -80px;
+            left: 10%;
+            animation-delay: 1.5s;
+        }
+
+        .orb.three {
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, #7ed9c6 0%, rgba(126, 217, 198, 0) 70%);
+            top: 35%;
+            left: 45%;
+            animation-delay: 3s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-14px);
+            }
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            padding: 2.5rem 6vw 4rem;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2.5rem;
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .brand h1 {
+            font-size: 1.8rem;
+            color: var(--navy);
+            letter-spacing: -0.5px;
+        }
+
+        .brand span {
+            font-size: 0.95rem;
+            color: rgba(15, 23, 42, 0.7);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 26px;
+            height: 3px;
+            background: var(--navy);
+            border-radius: 999px;
+        }
+
+        .nav-actions a {
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 999px;
+            padding: 0.7rem 1.3rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .nav-actions .login {
+            color: var(--navy);
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(15, 31, 72, 0.15);
+        }
+
+        .nav-actions .signup {
+            color: #08152d;
+            background: linear-gradient(135deg, #8fe3c7 0%, #ffcf7a 100%);
+            box-shadow: 0 10px 24px rgba(19, 51, 95, 0.2);
+        }
+
+        .nav-actions .legal {
+            color: var(--navy);
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 0.55rem 0.8rem;
+            border-radius: 14px;
+            box-shadow: none;
+        }
+
+        .nav-actions a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(12, 30, 68, 0.2);
+        }
+
+        .nav-actions .legal:hover {
+            box-shadow: none;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+            align-items: center;
+            margin-bottom: 3rem;
+            animation: fadeUp 0.8s ease;
+        }
+
+        .hero h2 {
+            font-size: clamp(2.2rem, 3.2vw, 3rem);
+            color: var(--navy);
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: rgba(7, 19, 38, 0.75);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.9rem;
+        }
+
+        .hero-actions a,
+        .hero-actions button {
+            text-decoration: none;
+            padding: 0.9rem 1.6rem;
+            border-radius: 16px;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hero-actions .primary {
+            background: var(--navy);
+            color: white;
+            box-shadow: 0 12px 30px rgba(9, 25, 54, 0.35);
+        }
+
+        .hero-actions .secondary {
+            border: 2px solid rgba(13, 30, 60, 0.2);
+            color: var(--navy);
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .hero-actions a:hover,
+        .hero-actions button:hover {
+            transform: translateY(-2px);
+        }
+
+        .hero-search {
+            display: grid;
+            gap: 0.9rem;
+            max-width: 520px;
+        }
+
+        .hero-search label {
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        .search-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .suggestion-wrap {
+            position: relative;
+            flex: 1 1 240px;
+            min-width: 220px;
+        }
+
+        .search-input input {
+            width: 100%;
+            flex: 1;
+            min-width: 220px;
+            padding: 0.85rem 1.1rem;
+            border-radius: 16px;
+            border: 2px solid rgba(15, 31, 72, 0.15);
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .search-input button {
+            padding: 0.85rem 1.4rem;
+            border-radius: 16px;
+            border: none;
+            background: var(--navy);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 12px 24px rgba(9, 25, 54, 0.25);
+        }
+
+        .suggestion-box {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(15, 31, 72, 0.12);
+            border-radius: 14px;
+            box-shadow: 0 18px 34px rgba(9, 25, 54, 0.16);
+            padding: 0.35rem;
+            max-height: 220px;
+            overflow-y: auto;
+            display: none;
+            z-index: 5;
+        }
+
+
+        .suggestion-box.active {
+            display: block;
+        }
+
+        .suggestion-item {
+            width: 100%;
+            text-align: left;
+            border: none;
+            background: transparent;
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--navy);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .job-suggestions .suggestion-item {
+            padding: 0.85rem 1.4rem;
+            border-radius: 0;
+            border: none;
+            background: #fff;
+            color: #000;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: none;
+        }
+
+        .job-suggestions .suggestion-item:hover,
+        .job-suggestions .suggestion-item:focus {
+            background: #e9eef5;
+            color: #000;
+            outline: none;
+        }
+
+        .suggestion-item:hover,
+        .suggestion-item:focus {
+            background: transparent;
+            color: var(--ocean);
+            outline: none;
+        }
+
+        .request-flow {
+            margin-bottom: 3rem;
+            background: var(--card);
+            border-radius: 28px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            display: none;
+        }
+
+        .request-flow.active {
+            display: block;
+            animation: fadeUp 0.6s ease;
+        }
+
+        .request-step {
+            margin-top: 1.8rem;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .request-step h3 {
+            color: var(--navy);
+            margin-bottom: 0.2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .form-grid input,
+        .form-grid textarea {
+            width: 100%;
+            border-radius: 14px;
+            border: 1px solid rgba(15, 31, 72, 0.15);
+            padding: 0.8rem 1rem;
+            font-size: 0.98rem;
+            font-family: inherit;
+        }
+
+        .form-grid textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .location-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .location-row .suggestion-wrap {
+            flex: 1 1 240px;
+        }
+
+        .location-row input {
+            margin: 0;
+        }
+
+        .ghost-btn {
+            padding: 0.75rem 1.2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(15, 31, 72, 0.2);
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--navy);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .location-status {
+            font-size: 0.9rem;
+            color: rgba(15, 31, 72, 0.7);
+        }
+
+        .helper-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .helper-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 18px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            box-shadow: 0 12px 24px rgba(15, 31, 72, 0.12);
+        }
+
+        .helper-card h4 {
+            color: var(--navy);
+        }
+
+        .helper-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .status-badge::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .status-badge.active {
+            background: rgba(34, 197, 94, 0.16);
+            color: #16a34a;
+        }
+
+        .status-badge.offline {
+            background: rgba(148, 163, 184, 0.25);
+            color: #64748b;
+        }
+
+        .status-badge.on-call {
+            background: rgba(245, 158, 11, 0.18);
+            color: #d97706;
+        }
+
+        .helper-card p {
+            color: rgba(7, 19, 38, 0.7);
+            font-size: 0.95rem;
+        }
+
+        .select-btn {
+            margin-top: auto;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #8fe3c7 0%, #ffcf7a 100%);
+            color: #08152d;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .selection-card {
+            margin-top: 1.4rem;
+            padding: 1.2rem 1.4rem;
+            border-radius: 18px;
+            background: rgba(15, 31, 72, 0.08);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .selection-card strong {
+            color: var(--navy);
+        }
+
+        .hero-art {
+            background: var(--card);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            padding: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-art svg {
+            width: 100%;
+            max-width: 320px;
+            height: auto;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--navy);
+            margin-bottom: 1.5rem;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 22px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            animation: fadeUp 0.9s ease;
+        }
+
+        .card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .card svg {
+            width: 100%;
+            height: 140px;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            margin-bottom: 0.6rem;
+            color: var(--navy);
+        }
+
+        .card p {
+            color: rgba(7, 19, 38, 0.7);
+            font-size: 0.98rem;
+        }
+
+        .cta {
+            background: linear-gradient(120deg, rgba(14, 31, 72, 0.95), rgba(28, 83, 148, 0.95));
+            border-radius: 26px;
+            color: white;
+            padding: 2.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .cta p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+        }
+
+        .cta-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.9rem;
+        }
+
+        .cta-actions a {
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 14px;
+            font-weight: 600;
+            background: white;
+            color: var(--navy);
+        }
+
+        .cta-actions a.secondary {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0px);
+            }
+        }
+
+        @media (max-width: 720px) {
+            .page {
+                padding: 2rem 5vw 3rem;
+            }
+
+            .cta {
+                padding: 1.8rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page {
+                padding: 1.75rem 1rem 3rem;
+            }
+
+            .brand h1 {
+                font-size: 1.4rem;
+            }
+
+            .brand span {
+                font-size: 0.85rem;
+            }
+
+            .nav-actions {
+                left: 0;
+                right: 0;
+                width: 100%;
+            }
+
+            .nav-actions a {
+                width: 100%;
+                text-align: left;
+            }
+
+            .hero {
+                gap: 1.5rem;
+            }
+
+            .hero h2 {
+                font-size: 1.7rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .hero-actions a,
+            .hero-actions button {
+                width: 100%;
+                text-align: center;
+            }
+
+            .search-input {
+                flex-direction: column;
+            }
+
+            .search-input input,
+            .search-input button {
+                width: 100%;
+            }
+
+            .cta-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .cta-actions a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .nav {
+                position: relative;
+            }
+
+            .nav-actions {
+                position: absolute;
+                top: calc(100% + 12px);
+                right: 0;
+                background: rgba(255, 255, 255, 0.98);
+                border-radius: 16px;
+                padding: 1rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+                box-shadow: 0 18px 40px rgba(15, 23, 42, 0.2);
+                opacity: 0;
+                transform: translateY(-10px);
+                pointer-events: none;
+                transition: all 0.2s ease;
+                z-index: 30;
+            }
+
+            .nav-actions.active {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: all;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        html.dark body {
+            background: radial-gradient(circle at top left, #0f172a 0%, #0b1324 35%, #0d1b3d 70%, #07101f 100%);
+            color: #e2e8f0;
+        }
+
+        html.dark .brand h1,
+        html.dark .hero h2,
+        html.dark .section-title {
+            color: #e2e8f0;
+        }
+
+        html.dark .brand span,
+        html.dark .hero p {
+            color: rgba(226, 232, 240, 0.75);
+        }
+
+        html.dark .nav-actions .login {
+            background: rgba(15, 23, 42, 0.8);
+            color: #e2e8f0;
+            border-color: rgba(148, 163, 184, 0.3);
+        }
+
+        html.dark .hamburger span {
+            background: #e2e8f0;
+        }
+
+        @media (max-width: 900px) {
+            html.dark .nav-actions {
+                background: rgba(15, 23, 42, 0.9);
+            }
+        }
+
+        html.dark .hero-actions .secondary {
+            background: rgba(15, 23, 42, 0.7);
+            color: #e2e8f0;
+            border-color: rgba(148, 163, 184, 0.35);
+        }
+
+        html.dark .hero-art,
+        html.dark .card,
+        html.dark .cta {
+            background: rgba(15, 23, 42, 0.85);
+            color: #e2e8f0;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        html.dark .card h3,
+        html.dark .cta h3 {
+            color: #f8fafc;
+        }
+
+        html.dark .card p,
+        html.dark .cta p {
+            color: rgba(226, 232, 240, 0.7);
+        }
+
+        html.dark .cta.helper {
+            background: rgba(30, 41, 59, 0.9) !important;
+            color: #e2e8f0 !important;
+        }
+
+        html.dark .hero-search label,
+        html.dark .request-step h3,
+        html.dark .selection-card strong {
+            color: #e2e8f0;
+        }
+
+        html.dark .search-input input,
+        html.dark .form-grid input,
+        html.dark .form-grid textarea {
+            background: rgba(15, 23, 42, 0.85);
+            border-color: rgba(148, 163, 184, 0.35);
+            color: #e2e8f0;
+        }
+
+        html.dark .suggestion-box {
+            background: rgba(15, 23, 42, 0.95);
+            border-color: rgba(148, 163, 184, 0.35);
+        }
+
+
+        html.dark .suggestion-item {
+            color: #e2e8f0;
+        }
+
+        html.dark .suggestion-item:hover,
+        html.dark .suggestion-item:focus {
+            background: transparent;
+            color: #cbd5f5;
+        }
+
+        html.dark .job-suggestions .suggestion-item {
+            background: rgba(15, 23, 42, 0.92);
+            color: #e2e8f0;
+        }
+
+        html.dark .job-suggestions .suggestion-item:hover,
+        html.dark .job-suggestions .suggestion-item:focus {
+            background: rgba(148, 163, 184, 0.18);
+            color: #e2e8f0;
+        }
+
+        html.dark .request-flow,
+        html.dark .helper-card {
+            background: rgba(15, 23, 42, 0.85);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        html.dark .helper-card p,
+        html.dark .location-status {
+            color: rgba(226, 232, 240, 0.7);
+        }
+
+        html.dark .ghost-btn {
+            background: rgba(148, 163, 184, 0.12);
+            border-color: rgba(148, 163, 184, 0.4);
+            color: #e2e8f0;
+        }
+
+        html.dark .selection-card {
+            background: rgba(148, 163, 184, 0.12);
+        }
+    </style>
+</head>
+<body>
+    <div class="background-orbs">
+        <div class="orb one"></div>
+        <div class="orb two"></div>
+        <div class="orb three"></div>
+    </div>
+
+    <div class="page">
+        <header class="nav">
+            <div class="brand">
+                <h1>The Helper</h1>
+                <span>Real people, real help, right when you need it.</span>
+            </div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-actions" id="navActions">
+                <a class="legal" href="/legal">Legal</a>
+                <a class="login" href="/customers">Log in</a>
+                <a class="signup" href="/helpers">Helper log in</a>
+            </div>
+        </header>
+
+        <main class="hero">
+            <div>
+                <h2>Let us help you find trusted local help.</h2>
+                <p>
+                    The Helper connects you with skilled local talent for repairs, home services,
+                    personal projects, and everyday tasks. We focus on speed, safety, and clear pricing
+                    so you feel confident from request to completion.
+                </p>
+                <div class="hero-search">
+                    <label for="jobSearch">What do you need help with?</label>
+                    <div class="search-input">
+                        <div class="suggestion-wrap">
+                            <input id="jobSearch" type="text" placeholder="Try plumbing repair or house cleaning">
+                            <div class="suggestion-box job-suggestions" id="jobSuggestionsBox"></div>
+                        </div>
+                        <button id="startRequest" type="button">Start</button>
+                    </div>
+                </div>
+                <div class="hero-actions" style="margin-top: 1.5rem;">
+                    <a class="primary" href="/customers?mode=signup">Sign up</a>
+                    <a class="secondary" href="/customers">Log in</a>
+                </div>
+            </div>
+            <div class="hero-art">
+                <svg viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Helper connection illustration">
+                    <defs>
+                        <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" stop-color="#7fc0ff" />
+                            <stop offset="1" stop-color="#1f5fa3" />
+                        </linearGradient>
+                        <linearGradient id="sun" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" stop-color="#ffcf7a" />
+                            <stop offset="1" stop-color="#ff9f5b" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="14" y="16" width="332" height="228" rx="26" fill="url(#sky)" />
+                    <circle cx="86" cy="78" r="32" fill="url(#sun)" />
+                    <rect x="50" y="135" width="110" height="70" rx="18" fill="#ffffff" opacity="0.85" />
+                    <rect x="190" y="110" width="120" height="95" rx="20" fill="#ffffff" opacity="0.9" />
+                    <path d="M70 170 h70" stroke="#0e1f48" stroke-width="8" stroke-linecap="round" />
+                    <path d="M210 150 h70" stroke="#0e1f48" stroke-width="8" stroke-linecap="round" />
+                    <circle cx="235" cy="200" r="18" fill="#7fc0ff" />
+                    <circle cx="270" cy="200" r="18" fill="#8fe3c7" />
+                </svg>
+            </div>
+        </main>
+
+        <section class="request-flow" id="requestFlow">
+            <h3 class="section-title">Start your request</h3>
+            <p>Tell us what you need and pick a helper you trust. We will save everything for your signup.</p>
+
+            <div class="request-step" id="jobDetailsStep">
+                <h3>Job details</h3>
+                <div class="form-grid">
+                    <div>
+                        <label for="jobTitle">Job title</label>
+                        <input id="jobTitle" type="text" placeholder="e.g. Plumbing repair" required>
+                    </div>
+                    <div>
+                        <label for="jobBudget">Budget</label>
+                        <input id="jobBudget" type="text" placeholder="$150 - $300">
+                    </div>
+                    <div>
+                        <label for="jobKeywords">Keywords</label>
+                        <input id="jobKeywords" type="text" placeholder="plumbing, leak, pipes">
+                    </div>
+                    <div>
+                        <label for="jobLocation">Location</label>
+                        <div class="location-row">
+                            <button class="ghost-btn" type="button" id="jobLocationButton">Use my location</button>
+                            <div class="suggestion-wrap">
+                                <input id="jobLocation" type="text" placeholder="City, ST">
+                                <div class="suggestion-box" id="locationSuggestionsBox"></div>
+                            </div>
+                        </div>
+                        <div id="jobLocationStatus" class="location-status"></div>
+                    </div>
+                    <div style="grid-column: 1 / -1;">
+                        <label for="jobDescription">Description</label>
+                        <textarea id="jobDescription" placeholder="Describe the work and any timing details."></textarea>
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <button class="primary" type="button" id="detailsNext">Find helpers</button>
+                </div>
+            </div>
+
+            <div class="request-step" id="helperStep" style="display: none;">
+                <h3>Pick a helper</h3>
+                <div class="search-input">
+                    <input id="helperSearch" type="text" placeholder="Search helpers by skill or name">
+                    <button id="helperSearchButton" type="button">Search</button>
+                </div>
+                <div id="helperResults" class="helper-grid"></div>
+                <div id="selectionCard" class="selection-card" style="display: none;">
+                    <div>
+                        <strong id="selectedHelperName">Helper selected</strong>
+                        <div id="selectedHelperMeta"></div>
+                    </div>
+                    <button class="select-btn" type="button" id="continueSignup">Sign up to message</button>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h3 class="section-title">What we do</h3>
+            <div class="cards">
+                <article class="card">
+                    <svg viewBox="0 0 240 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Match helpers">
+                        <defs>
+                            <linearGradient id="card1" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0" stop-color="#e6f4ff" />
+                                <stop offset="1" stop-color="#b7d4ff" />
+                            </linearGradient>
+                        </defs>
+                        <rect x="0" y="0" width="240" height="140" rx="18" fill="url(#card1)" />
+                        <circle cx="70" cy="70" r="28" fill="#7fc0ff" />
+                        <circle cx="150" cy="55" r="20" fill="#8fe3c7" />
+                        <path d="M40 110 h160" stroke="#0e1f48" stroke-width="6" stroke-linecap="round" opacity="0.7" />
+                    </svg>
+                    <h3>Match the right skills</h3>
+                    <p>We connect customers with helpers based on services, location, and availability.</p>
+                </article>
+                <article class="card">
+                    <svg viewBox="0 0 240 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Manage jobs">
+                        <defs>
+                            <linearGradient id="card2" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0" stop-color="#fff2d6" />
+                                <stop offset="1" stop-color="#ffe0a8" />
+                            </linearGradient>
+                        </defs>
+                        <rect x="0" y="0" width="240" height="140" rx="18" fill="url(#card2)" />
+                        <rect x="40" y="30" width="160" height="22" rx="11" fill="#0e1f48" opacity="0.9" />
+                        <rect x="40" y="65" width="130" height="16" rx="8" fill="#0e1f48" opacity="0.7" />
+                        <rect x="40" y="92" width="90" height="16" rx="8" fill="#0e1f48" opacity="0.5" />
+                    </svg>
+                    <h3>Track jobs clearly</h3>
+                    <p>Customers can post work, manage budgets, and close jobs when everything is done.</p>
+                </article>
+                <article class="card">
+                    <svg viewBox="0 0 240 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Chat safely">
+                        <defs>
+                            <linearGradient id="card3" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0" stop-color="#dff7f2" />
+                                <stop offset="1" stop-color="#b6eadc" />
+                            </linearGradient>
+                        </defs>
+                        <rect x="0" y="0" width="240" height="140" rx="18" fill="url(#card3)" />
+                        <rect x="36" y="34" width="120" height="38" rx="12" fill="#0e1f48" opacity="0.85" />
+                        <rect x="84" y="86" width="120" height="32" rx="12" fill="#0e1f48" opacity="0.65" />
+                        <circle cx="178" cy="52" r="14" fill="#8fe3c7" />
+                        <circle cx="66" cy="102" r="12" fill="#7fc0ff" />
+                    </svg>
+                    <h3>Chat with confidence</h3>
+                    <p>Built-in messaging keeps details organized and helps both sides stay aligned.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="cta">
+            <h3>Ready to get started?</h3>
+            <p>Share a quick request and we will match you with the right helper.</p>
+        </section>
+
+        <section class="cta helper" style="margin-top: 2rem; background: rgba(255, 255, 255, 0.85); color: var(--navy);">
+            <h3 style="color: var(--navy);">Are you a helper?</h3>
+            <p style="color: rgba(7, 19, 38, 0.7); font-size: 0.95rem;">
+                Offer your skills, meet local customers, and build your reputation with steady work.
+            </p>
+            <div class="cta-actions">
+                <a href="/helpers">Helper log in</a>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const navActions = document.getElementById('navActions');
+        function toggleMenu() {
+            navActions.classList.toggle('active');
+        }
+
+        document.addEventListener('click', (event) => {
+            if (!document.querySelector('.nav').contains(event.target) && navActions.classList.contains('active')) {
+                navActions.classList.remove('active');
+            }
+        });
+
+        const jobSearchInput = document.getElementById('jobSearch');
+        const startRequestButton = document.getElementById('startRequest');
+        const requestFlow = document.getElementById('requestFlow');
+        const jobTitleInput = document.getElementById('jobTitle');
+        const jobBudgetInput = document.getElementById('jobBudget');
+        const jobKeywordsInput = document.getElementById('jobKeywords');
+        const jobLocationInput = document.getElementById('jobLocation');
+        const jobLocationButton = document.getElementById('jobLocationButton');
+        const jobLocationStatus = document.getElementById('jobLocationStatus');
+        const jobDescriptionInput = document.getElementById('jobDescription');
+        const detailsNext = document.getElementById('detailsNext');
+        const helperStep = document.getElementById('helperStep');
+        const helperSearch = document.getElementById('helperSearch');
+        const helperSearchButton = document.getElementById('helperSearchButton');
+        const helperResults = document.getElementById('helperResults');
+        const selectionCard = document.getElementById('selectionCard');
+        const selectedHelperName = document.getElementById('selectedHelperName');
+        const selectedHelperMeta = document.getElementById('selectedHelperMeta');
+        const continueSignup = document.getElementById('continueSignup');
+        const jobSuggestionsBox = document.getElementById('jobSuggestionsBox');
+        const locationSuggestionsBox = document.getElementById('locationSuggestionsBox');
+
+        let selectedHelper = null;
+
+        const jobSuggestionList = buildJobSuggestions();
+
+        function buildJobSuggestions() {
+            const suggestions = new Set([
+                'Plumbing repair',
+                'House cleaning',
+                'Electrical troubleshooting',
+                'Appliance installation',
+                'Drywall repair',
+                'HVAC maintenance',
+                'Furniture assembly',
+                'Landscaping',
+                'Interior painting',
+                'Locksmith assistance',
+                'Roof inspection',
+                'Carpet cleaning',
+                'Window installation',
+                'Gutter cleaning',
+                'Bathroom remodel',
+                'Kitchen refresh',
+                'Smart home setup',
+                'Tile replacement',
+                'Basement cleanup',
+                'Moving help'
+            ]);
+
+            const trades = [
+                'Plumbing',
+                'Electrical',
+                'HVAC',
+                'Carpentry',
+                'Painting',
+                'Cleaning',
+                'Landscaping',
+                'Handyman',
+                'Flooring',
+                'Roofing',
+                'Masonry',
+                'Appliance',
+                'Pest control',
+                'Security',
+                'Window',
+                'Door',
+                'Drywall',
+                'Concrete',
+                'Pool',
+                'Garage',
+                'Moving',
+                'Organization',
+                'Furniture',
+                'Plaster',
+                'Water damage',
+                'Garden',
+                'Pressure washing',
+                'Fence',
+                'Deck',
+                'Siding'
+            ];
+
+            const tasks = [
+                'repair',
+                'installation',
+                'inspection',
+                'maintenance',
+                'replacement',
+                'upgrade',
+                'setup',
+                'cleanup',
+                'deep clean',
+                'tune-up',
+                'emergency service',
+                'same-day help',
+                'consultation',
+                'remodel',
+                'assembly',
+                'haul away',
+                'seasonal prep',
+                'troubleshooting',
+                'diagnostic',
+                'refresh'
+            ];
+
+            const contexts = [
+                'Residential',
+                'Commercial',
+                'Short notice',
+                'Weekend',
+                'After-hours',
+                'Eco-friendly',
+                'Budget-friendly',
+                'Premium',
+                'Multi-room',
+                'Single room',
+                'Small job',
+                'Large project',
+                'Urgent',
+                'Routine',
+                'Annual',
+                'Monthly',
+                'One-time',
+                'Full-service',
+                'Custom',
+                'Express'
+            ];
+
+            for (const trade of trades) {
+                for (const task of tasks) {
+                    suggestions.add(`${trade} ${task}`);
+                    if (suggestions.size >= 520) break;
+                }
+                if (suggestions.size >= 520) break;
+            }
+
+            if (suggestions.size < 520) {
+                for (const context of contexts) {
+                    for (const trade of trades) {
+                        suggestions.add(`${context} ${trade} service`);
+                        if (suggestions.size >= 520) break;
+                    }
+                    if (suggestions.size >= 520) break;
+                }
+            }
+
+            return Array.from(suggestions).slice(0, 520);
+        }
+
+        function renderSuggestionBox(box, items, onSelect) {
+            if (!box) return;
+            box.innerHTML = '';
+            if (!items.length) {
+                box.classList.remove('active');
+                return;
+            }
+            items.forEach((item) => {
+                const button = document.createElement('button');
+                let handled = false;
+                button.type = 'button';
+                button.className = 'suggestion-item';
+                button.textContent = item;
+                const handleSelect = (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if (handled) {
+                        return;
+                    }
+                    handled = true;
+                    onSelect(item);
+                    box.classList.remove('active');
+                };
+                button.addEventListener('pointerdown', handleSelect);
+                button.addEventListener('click', handleSelect);
+                button.addEventListener('touchstart', handleSelect, { passive: false });
+                box.appendChild(button);
+            });
+            box.classList.add('active');
+        }
+
+        function openRequestFlow(prefill) {
+            const term = (prefill || jobSearchInput.value || '').trim();
+            if (!term) {
+                return;
+            }
+            requestFlow.classList.add('active');
+            jobTitleInput.value = term;
+            requestFlow.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            jobDescriptionInput.focus();
+        }
+
+        function showHelperStep() {
+            helperStep.style.display = 'grid';
+            helperStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (jobTitleInput.value.trim()) {
+                helperSearch.value = jobTitleInput.value.trim();
+                loadHelpers(jobTitleInput.value.trim());
+            }
+        }
+
+        function updateJobSuggestions(value) {
+            if (!jobSuggestionsBox || !jobSearchInput) return;
+            const term = (value || '').trim().toLowerCase();
+            const matches = (term
+                ? jobSuggestionList.filter((item) => item.toLowerCase().includes(term))
+                : jobSuggestionList
+            ).slice(0, 8);
+            renderSuggestionBox(jobSuggestionsBox, matches, (selection) => {
+                jobSearchInput.value = selection;
+                jobSearchInput.blur();
+                openRequestFlow(selection);
+            });
+        }
+
+        if (startRequestButton) {
+            startRequestButton.addEventListener('click', () => openRequestFlow());
+        }
+
+        if (jobSearchInput) {
+            jobSearchInput.addEventListener('input', () => {
+                updateJobSuggestions(jobSearchInput.value);
+            });
+            jobSearchInput.addEventListener('focus', () => {
+                updateJobSuggestions(jobSearchInput.value);
+            });
+            jobSearchInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    openRequestFlow();
+                }
+            });
+            jobSearchInput.addEventListener('change', () => {
+                if (jobSearchInput.value.trim()) {
+                    openRequestFlow(jobSearchInput.value);
+                }
+            });
+        }
+
+        if (detailsNext) {
+            detailsNext.addEventListener('click', () => {
+                if (!jobTitleInput.value.trim() || !jobDescriptionInput.value.trim()) {
+                    alert('Please add a title and description before choosing a helper.');
+                    return;
+                }
+                showHelperStep();
+            });
+        }
+
+        async function loadHelpers(query) {
+            if (!helperResults) return;
+            helperResults.innerHTML = '';
+            const locationValue = jobLocationInput ? jobLocationInput.value.trim() : '';
+            const params = new URLSearchParams();
+            if (query) {
+                params.set('q', query);
+            }
+            if (locationValue) {
+                params.set('location', locationValue);
+            }
+            const response = await fetch(`/public/helpers${params.toString() ? `?${params}` : ''}`);
+            if (!response.ok) {
+                helperResults.textContent = 'Unable to load helpers right now.';
+                return;
+            }
+            const data = await response.json();
+            const helpers = Array.isArray(data.helpers) ? data.helpers : [];
+            if (!helpers.length) {
+                helperResults.textContent = 'No helpers found. Try another search.';
+                return;
+            }
+            helpers.forEach((helper) => {
+                const card = document.createElement('div');
+                card.className = 'helper-card';
+
+                const title = document.createElement('div');
+                title.className = 'helper-title';
+                const name = document.createElement('h4');
+                name.textContent = helper.username;
+                const status = document.createElement('span');
+                const availability = (helper.availability_status || 'active').toLowerCase();
+                status.className = `status-badge ${availability.replace('_', '-')}`;
+                status.textContent = availability === 'on_call' ? 'On call' : availability.charAt(0).toUpperCase() + availability.slice(1);
+                title.appendChild(name);
+                title.appendChild(status);
+
+                const profession = document.createElement('p');
+                profession.textContent = helper.profession || 'Skilled helper';
+
+                const rate = document.createElement('p');
+                if (helper.pay_rate) {
+                    const label = helper.pay_type === 'per_job' ? 'per job' : 'per hour';
+                    rate.textContent = `$${Number(helper.pay_rate).toFixed(2)} ${label}`;
+                } else {
+                    rate.textContent = 'Rate available on request';
+                }
+
+                const bio = document.createElement('p');
+                bio.textContent = helper.bio || 'Trusted helper ready to assist.';
+
+                const selectButton = document.createElement('button');
+                selectButton.className = 'select-btn';
+                selectButton.type = 'button';
+                selectButton.textContent = 'Select helper';
+                selectButton.addEventListener('click', () => {
+                    selectedHelper = helper;
+                    selectedHelperName.textContent = `Selected: ${helper.username}`;
+                    selectedHelperMeta.textContent = helper.profession || '';
+                    selectionCard.style.display = 'flex';
+                });
+
+                card.appendChild(title);
+                card.appendChild(profession);
+                card.appendChild(rate);
+                card.appendChild(bio);
+                card.appendChild(selectButton);
+                helperResults.appendChild(card);
+            });
+            helperResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        if (helperSearchButton) {
+            helperSearchButton.addEventListener('click', () => {
+                loadHelpers(helperSearch.value.trim());
+            });
+        }
+
+        if (helperSearch) {
+            helperSearch.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    loadHelpers(helperSearch.value.trim());
+                }
+            });
+        }
+
+        if (continueSignup) {
+            continueSignup.addEventListener('click', async () => {
+                if (!selectedHelper) {
+                    alert('Select a helper to continue.');
+                    return;
+                }
+                const payload = {
+                    title: jobTitleInput.value.trim(),
+                    description: jobDescriptionInput.value.trim(),
+                    keywords: jobKeywordsInput.value.trim(),
+                    budget: jobBudgetInput.value.trim(),
+                    location: jobLocationInput.value.trim(),
+                    helper_username: selectedHelper.username
+                };
+                if (!payload.title || !payload.description) {
+                    alert('Please add a title and description before continuing.');
+                    return;
+                }
+                const response = await fetch('/public/pending-job', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    alert('Unable to save your request. Please try again.');
+                    return;
+                }
+                const data = await response.json();
+                window.location.href = data.redirect || '/customers?mode=signup';
+            });
+        }
+
+        if (jobLocationButton && jobLocationInput) {
+            jobLocationButton.addEventListener('click', () => {
+                if (!navigator.geolocation) {
+                    jobLocationStatus.textContent = 'Location is not supported by this browser.';
+                    return;
+                }
+                const hostname = window.location.hostname;
+                const isLocalhost = ['localhost', '127.0.0.1', '127.0.1.1', '0.0.0.0', '::1'].includes(hostname);
+                if (!window.isSecureContext && !isLocalhost) {
+                    jobLocationStatus.textContent = 'Location access requires HTTPS or http://localhost. Enter your location manually.';
+                    return;
+                }
+                const options = { enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 };
+
+                const handlePosition = async (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    const fallbackLocation = `Lat ${latitude.toFixed(5)}, Lng ${longitude.toFixed(5)}`;
+                    try {
+                        const response = await fetch(`/public/reverse-geocode?lat=${latitude}&lon=${longitude}`);
+                        if (!response.ok) {
+                            throw new Error('Reverse geocode failed');
+                        }
+                        const data = await response.json();
+                        jobLocationInput.value = data.location || fallbackLocation;
+                        jobLocationStatus.textContent = 'Location added.';
+                    } catch (error) {
+                        jobLocationInput.value = fallbackLocation;
+                        jobLocationStatus.textContent = 'Location added.';
+                    } finally {
+                        jobLocationButton.disabled = false;
+                    }
+                };
+
+                const requestPosition = () => new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, options);
+                });
+
+                const tryLocation = async (attempt = 0) => {
+                    jobLocationStatus.textContent = 'Finding your location...';
+                    jobLocationButton.disabled = true;
+                    try {
+                        const position = await requestPosition();
+                        await handlePosition(position);
+                    } catch (error) {
+                        if (error && error.code === 1 && navigator.permissions && navigator.permissions.query) {
+                            try {
+                                const status = await navigator.permissions.query({ name: 'geolocation' });
+                                if (status.state === 'granted') {
+                                    const retry = await requestPosition();
+                                    await handlePosition(retry);
+                                    return;
+                                }
+                                if (status.state === 'prompt') {
+                                    jobLocationStatus.textContent = 'Allow location access in the prompt to continue.';
+                                    jobLocationButton.disabled = false;
+                                    status.onchange = () => {
+                                        if (status.state === 'granted') {
+                                            tryLocation();
+                                        }
+                                    };
+                                    return;
+                                }
+                            } catch (permissionError) {
+                                // Fall through to generic message.
+                            }
+                        }
+                        if (error && error.code === 1) {
+                            jobLocationStatus.textContent = 'Location access was blocked by your browser settings.';
+                        } else {
+                            if (attempt < 2) {
+                                setTimeout(() => {
+                                    tryLocation(attempt + 1);
+                                }, 500);
+                                return;
+                            }
+                            jobLocationStatus.textContent = 'Unable to access your location.';
+                        }
+                        jobLocationButton.disabled = false;
+                    }
+                };
+
+                const runLocationRequest = async () => {
+                    if (navigator.permissions && navigator.permissions.query) {
+                        try {
+                            const status = await navigator.permissions.query({ name: 'geolocation' });
+                            if (status.state === 'denied') {
+                                jobLocationStatus.textContent = 'Location access was blocked by your browser settings.';
+                                return;
+                            }
+                            if (status.state === 'prompt') {
+                                status.onchange = () => {
+                                    if (status.state === 'granted') {
+                                        tryLocation();
+                                    }
+                                };
+                            }
+                        } catch (permissionError) {
+                            // Ignore and continue to request location.
+                        }
+                    }
+                    tryLocation();
+                };
+
+                runLocationRequest();
+            });
+        }
+
+        function updateLocationSuggestions(value) {
+            if (!locationSuggestionsBox || !jobLocationInput) return;
+            const term = (value || '').trim();
+            if (term.length < 2) {
+                locationSuggestionsBox.classList.remove('active');
+                return;
+            }
+            fetch(`/public/location-suggest?query=${encodeURIComponent(term)}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    const items = (data.suggestions || []).slice(0, 6);
+                    renderSuggestionBox(locationSuggestionsBox, items, (selection) => {
+                        jobLocationInput.value = selection;
+                    });
+                })
+                .catch(() => {
+                    locationSuggestionsBox.classList.remove('active');
+                });
+        }
+
+        let locationTimer = null;
+        if (jobLocationInput) {
+            jobLocationInput.addEventListener('input', () => {
+                clearTimeout(locationTimer);
+                locationTimer = setTimeout(() => {
+                    updateLocationSuggestions(jobLocationInput.value.trim());
+                }, 350);
+            });
+            jobLocationInput.addEventListener('focus', () => {
+                updateLocationSuggestions(jobLocationInput.value.trim());
+            });
+        }
+        document.addEventListener('click', (event) => {
+            const target = event.target;
+            if (jobSuggestionsBox && jobSearchInput) {
+                if (target !== jobSearchInput && !jobSuggestionsBox.contains(target)) {
+                    jobSuggestionsBox.classList.remove('active');
+                }
+            }
+            if (locationSuggestionsBox && jobLocationInput) {
+                if (target !== jobLocationInput && !locationSuggestionsBox.contains(target)) {
+                    locationSuggestionsBox.classList.remove('active');
+                }
+            }
+        });
+
+        document.addEventListener('touchstart', (event) => {
+            const target = event.target;
+            if (jobSuggestionsBox && jobSearchInput) {
+                if (target !== jobSearchInput && !jobSuggestionsBox.contains(target)) {
+                    jobSuggestionsBox.classList.remove('active');
+                }
+            }
+            if (locationSuggestionsBox && jobLocationInput) {
+                if (target !== jobLocationInput && !locationSuggestionsBox.contains(target)) {
+                    locationSuggestionsBox.classList.remove('active');
+                }
+            }
+        }, { passive: true });
+    </script>
+</body>
+</html>

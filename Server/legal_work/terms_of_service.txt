@@ -1,0 +1,44 @@
+TITLE: Terms of Service
+EFFECTIVE_DATE:
+COMPANY_NAME:
+WEBSITE_URL:
+CONTACT_EMAIL:
+
+1. Overview
+- Describe the service, who can use it, and role of the platform.
+
+2. Eligibility
+- Age requirement, account requirements, prohibited users.
+
+3. Account Rules
+- Username rules, security responsibilities, termination.
+
+4. Services and Marketplace
+- Customer/helper relationship, platform role, no employment relationship.
+
+5. Payments and Fees
+- Fee structure, payment timing, refunds, chargebacks.
+
+6. Background Checks and Verification
+- What checks you run, limitations, no guarantees language.
+
+7. User Content
+- Reviews, photos, licenses, takedown requests.
+
+8. Prohibited Conduct
+- Off-platform contact restrictions, fraud, harassment.
+
+9. Disputes Between Users
+- Responsibility and resolution process.
+
+10. Platform Liability Limits
+- Disclaimers, limitation of liability, indemnification.
+
+11. Termination
+- Account suspension/termination rules.
+
+12. Changes
+- How you update terms and notify users.
+
+13. Contact
+- Support info.

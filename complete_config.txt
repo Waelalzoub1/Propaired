@@ -1,0 +1,91 @@
+THE HELPER - COMPLETE CONFIGURATION (single reference)
+
+ROOT PATHS
+- Project root: /home/wael/Desktop/helper
+- Server root: /home/wael/Desktop/helper/Server
+- Helper templates: /home/wael/Desktop/helper/Helper/templates
+- Customer templates: /home/wael/Desktop/helper/Customer/templates
+- Public templates: /home/wael/Desktop/helper/Server/templates
+
+SESSION + SECURITY
+- Session secret file (required): /home/wael/Desktop/helper/Server/config/HELPER_SESSION_SECRET
+- Optional env override (path): HELPER_SESSION_SECRET_FILE
+- Cookie HTTPS toggle (code): Server/main.py -> USE_HTTPS (True/False)
+
+EMAIL (SMTP) CONFIG
+File: /home/wael/Desktop/helper/Server/config/smtp.env
+- SMTP_HOST=
+- SMTP_PORT=587
+- SMTP_USER=
+- SMTP_PASSWORD=
+- SMTP_FROM=
+- SMTP_USE_TLS=true
+- SMTP_USE_SSL=false
+
+APP BASE URL (for email links)
+- APP_BASE_URL=https://your-domain.com
+
+ADMIN
+- HELPER_ADMIN_USERS=admin,secondadmin
+
+PAYMENTS (STRIPE)
+File: /home/wael/Desktop/helper/Server/config/integrations.env
+- STRIPE_SECRET_KEY=
+- STRIPE_PUBLISHABLE_KEY=
+- STRIPE_WEBHOOK_SECRET=
+- STRIPE_DEV_BYPASS=false
+- STRIPE_CONNECT_TYPE=express
+
+BACKGROUND CHECKS (CHECKR)
+File: /home/wael/Desktop/helper/Server/config/integrations.env
+- CHECKR_API_KEY=
+- CHECKR_PACKAGE_ID=
+- CHECKR_WEBHOOK_SECRET=
+- CHECKR_BASE_URL=https://api.checkr.com/v1
+- BACKGROUND_CHECK_VENDOR=
+- BACKGROUND_CHECK_WEBHOOK_SECRET=
+
+FEES + LIMITS
+File: /home/wael/Desktop/helper/Server/config/integrations.env
+- PLATFORM_FEE_PERCENT=25
+- HELPER_FEE_PERCENT=25
+- CUSTOMER_SERVICE_FEE_PERCENT=5
+- SALES_TAX_PERCENT=0
+- MIN_JOB_PAYMENT_CENTS=3500  (3500 = $35.00)
+
+CHAT RULES (code settings)
+- Message length: Server/main.py -> CHAT_MESSAGE_MAX_LENGTH (default 300)
+- Rate limit: Server/main.py -> CHAT_MESSAGE_MIN_SECONDS (default 1 second)
+- Contact blocking patterns: Server/main.py -> EMAIL_PATTERN, PHONE_PATTERN, ADDRESS_PATTERN
+
+MEDIA LIMITS (code settings)
+- Max image size: Server/main.py -> MAX_IMAGE_BYTES (default 5 MB)
+- Allowed image extensions: Server/main.py -> ALLOWED_IMAGE_EXTENSIONS
+
+LOCATION + SEARCH DATA
+- US cities dataset: /home/wael/Desktop/helper/Server/location_data/us_places.csv
+- Source file (raw): /home/wael/Desktop/helper/Server/location_data/2024_Gaz_place_national.txt
+- Location fetch script: /home/wael/Desktop/helper/Server/location_data/fetch_us_places.py
+- Optional env override for fetch URL: HELPER_PLACES_URL
+- Synonym dictionary path (WordNet): /home/wael/Desktop/helper/dict
+- Optional env override: HELPER_DICT_DIR
+
+LEGAL PAGES (DRAFT CONTENT)
+- Legal index: /legal
+- Terms: /legal/terms-of-service -> Server/legal_work/terms_of_service.txt
+- Privacy: /legal/privacy-policy -> Server/legal_work/privacy_policy.txt
+- Cookies: /legal/cookie-policy -> Server/legal_work/cookie_policy.txt
+- Refunds/Disputes: /legal/refund-dispute-policy -> Server/legal_work/refund_dispute_policy.txt
+- Community: /legal/community-guidelines -> Server/legal_work/community_guidelines.txt
+- Disclaimer: /legal/platform-disclaimer -> Server/legal_work/platform_disclaimer.txt
+- Support: /legal/support-contact -> Server/legal_work/support_contact.txt
+
+SSL / HTTPS (OPTIONAL)
+- If you use direct TLS with uvicorn, you need:
+  SSL_CERT_FILE=/path/fullchain.pem
+  SSL_KEY_FILE=/path/privkey.pem
+- For Cloudflare Tunnel, keep app on HTTP and let Cloudflare handle TLS.
+
+START COMMAND (manual)
+- Default HTTP: cd /home/wael/Desktop/helper/Server && /home/wael/Desktop/helper/venv/bin/uvicorn main:app --host 0.0.0.0 --port 80
+- Dev port: cd /home/wael/Desktop/helper/Server && /home/wael/Desktop/helper/venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000

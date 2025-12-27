@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Console | Customers</title>
+    <script>
+        (function() {
+            const match = document.cookie.match(/(?:^|; )theme=([^;]+)/);
+            const theme = match ? decodeURIComponent(match[1]) : "";
+            if (theme === "dark") {
+                document.documentElement.classList.add("dark");
+            }
+        })();
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap');
+
+        :root {
+            --admin-bg: radial-gradient(circle at top, #f8fafc, #e2e8f0 65%);
+            --admin-ink: #0f172a;
+            --admin-muted: #64748b;
+            --admin-card: #ffffff;
+            --admin-card-border: rgba(15, 23, 42, 0.08);
+            --admin-link-bg: #0f172a;
+            --admin-link-ink: #ffffff;
+            --admin-link-shadow: rgba(15, 23, 42, 0.2);
+            --admin-flash-bg: rgba(245, 158, 11, 0.18);
+            --admin-flash-border: rgba(245, 158, 11, 0.45);
+            --admin-flash-ink: #92400e;
+            --admin-table: #ffffff;
+            --admin-table-border: rgba(15, 23, 42, 0.08);
+            --admin-table-head: #64748b;
+            --admin-row-hover: rgba(148, 163, 184, 0.2);
+            --admin-pill-delete-bg: rgba(239, 68, 68, 0.12);
+            --admin-pill-delete-ink: #b91c1c;
+            --admin-input-bg: #ffffff;
+            --admin-input-border: rgba(15, 23, 42, 0.15);
+            --admin-input-ink: #0f172a;
+            --admin-section-bg: #ffffff;
+            --admin-section-border: rgba(15, 23, 42, 0.08);
+            --admin-link-accent: #2563eb;
+        }
+
+        html.dark {
+            --admin-bg: radial-gradient(circle at top, #0f1c2f, #050911 55%);
+            --admin-ink: #e1e8ff;
+            --admin-muted: #92a5d6;
+            --admin-card: rgba(7, 12, 22, 0.85);
+            --admin-card-border: rgba(255, 255, 255, 0.08);
+            --admin-link-bg: #fcd34d;
+            --admin-link-ink: #0f172a;
+            --admin-link-shadow: rgba(252, 211, 77, 0.35);
+            --admin-flash-bg: rgba(252, 211, 77, 0.12);
+            --admin-flash-border: rgba(252, 211, 77, 0.4);
+            --admin-flash-ink: #fcd34d;
+            --admin-table: rgba(14, 24, 44, 0.9);
+            --admin-table-border: rgba(255, 255, 255, 0.04);
+            --admin-table-head: #8fa0c7;
+            --admin-row-hover: rgba(255, 255, 255, 0.03);
+            --admin-pill-delete-bg: rgba(239, 68, 68, 0.15);
+            --admin-pill-delete-ink: #fecaca;
+            --admin-input-bg: rgba(5, 10, 20, 0.8);
+            --admin-input-border: rgba(255, 255, 255, 0.15);
+            --admin-input-ink: #f1f5ff;
+            --admin-section-bg: rgba(14, 24, 44, 0.9);
+            --admin-section-border: rgba(255, 255, 255, 0.05);
+            --admin-link-accent: #fcd34d;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Space Grotesk', 'Segoe UI', Tahoma, sans-serif;
+            background: var(--admin-bg);
+            min-height: 100vh;
+            margin: 0;
+            color: var(--admin-ink);
+            padding: 1.5rem;
+        }
+
+        .dashboard {
+            max-width: 1240px;
+            margin: 0 auto;
+            background: var(--admin-card);
+            border-radius: 32px;
+            padding: 2.5rem;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.45);
+            border: 1px solid var(--admin-card-border);
+        }
+
+        header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .title {
+            font-size: 2.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .subtitle {
+            color: var(--admin-muted);
+            margin: 0.2rem 0 0;
+            font-size: 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--admin-link-ink);
+            background: var(--admin-link-bg);
+            font-weight: 600;
+            border: none;
+            padding: 0.65rem 1.2rem;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px var(--admin-link-shadow);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 26px;
+            height: 3px;
+            background: var(--admin-link-ink);
+            border-radius: 999px;
+        }
+
+        html.dark .hamburger span {
+            background: var(--admin-link-accent);
+        }
+        .flash {
+            padding: 0.9rem 1.2rem;
+            border-radius: 16px;
+            background: var(--admin-flash-bg);
+            border: 1px solid var(--admin-flash-border);
+            color: var(--admin-flash-ink);
+            margin-bottom: 1.5rem;
+        }
+
+        .data-grid {
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--admin-table);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--admin-table-border);
+        }
+
+        th {
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.85rem;
+            color: var(--admin-table-head);
+        }
+
+        tbody tr:hover {
+            background: var(--admin-row-hover);
+        }
+
+        .actions form {
+            display: inline;
+        }
+
+        .pill-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 0.45rem 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .pill-btn.delete {
+            background: var(--admin-pill-delete-bg);
+            color: var(--admin-pill-delete-ink);
+        }
+
+        .pill-btn.delete:hover {
+            opacity: 0.85;
+        }
+
+        .detail-link {
+            color: var(--admin-link-accent);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .detail-link:hover {
+            text-decoration: underline;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--admin-muted);
+        }
+
+        .add-card {
+            background: var(--admin-section-bg);
+            padding: 1.8rem;
+            border-radius: 24px;
+            border: 1px solid var(--admin-section-border);
+        }
+
+        .add-card h2 {
+            margin: 0 0 1rem;
+            font-size: 1.4rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.35rem;
+            color: var(--admin-muted);
+            font-size: 0.9rem;
+        }
+
+        .field-help {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            margin-left: 0.4rem;
+            border-radius: 50%;
+            background: rgba(37, 99, 235, 0.15);
+            color: var(--admin-link-accent);
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: help;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.85rem 0.9rem;
+            border-radius: 14px;
+            border: 1px solid var(--admin-input-border);
+            background: var(--admin-input-bg);
+            color: var(--admin-input-ink);
+            font-size: 0.95rem;
+        }
+
+        .form-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .cta-btn {
+            border: none;
+            border-radius: 18px;
+            padding: 0.9rem 1.6rem;
+            background: linear-gradient(120deg, #4ade80, #22d3ee);
+            color: #041224;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 15px 25px rgba(45, 212, 191, 0.4);
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 1rem; }
+            .dashboard { padding: 1.5rem; }
+            header { flex-direction: column; align-items: flex-start; }
+        }
+
+        @media (max-width: 900px) {
+            header {
+                position: relative;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: calc(100% + 12px);
+                right: 0;
+                background: var(--admin-section-bg);
+                border-radius: 16px;
+                padding: 1rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+                box-shadow: 0 18px 40px rgba(15, 23, 42, 0.2);
+                opacity: 0;
+                transform: translateY(-10px);
+                pointer-events: none;
+                transition: all 0.2s ease;
+                z-index: 30;
+            }
+
+            .nav-links.active {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: all;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+    
+        .field-help {
+            position: relative;
+            border: none;
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+            font-family: inherit;
+        }
+
+        .field-help::after {
+            content: attr(data-tip);
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 8px);
+            transform: translateX(-50%) translateY(4px);
+            background: rgba(15, 23, 42, 0.95);
+            color: #f8fafc;
+            padding: 0.45rem 0.6rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: normal;
+            width: max-content;
+            max-width: 240px;
+            text-align: left;
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 20;
+        }
+
+        .field-help:hover::after,
+        .field-help:focus::after,
+        .field-help:focus-visible::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        html.dark .field-help::after {
+            background: rgba(226, 232, 240, 0.95);
+            color: #0f172a;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <div>
+                <p class="title">Customer Admin</p>
+                <p class="subtitle">Signed in as {{ username }}</p>
+            </div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="/helpers/admin">Manage Helpers</a>
+                <a href="/helpers/home">Back to Home</a>
+                <a href="/legal">Legal</a>
+            </div>
+        </header>
+
+        {% if message %}
+        <div class="flash">{{ message }}</div>
+        {% endif %}
+
+        <section class="data-grid">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Verified</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers %}
+                    <tr>
+                        <td><a class="detail-link" href="/helpers/admin/customers/{{ customer.username }}">{{ customer.username }}</a></td>
+                        <td>{{ customer.full_name }}</td>
+                        <td>{{ customer.contact_email }}</td>
+                        <td>{{ 'Yes' if customer.email_verified else 'No' }}</td>
+                        <td class="actions">
+                            <form method="post" action="/helpers/admin/customers/delete">
+                                <input type="hidden" name="target_username" value="{{ customer.username }}">
+                                <button type="submit" class="pill-btn delete">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="empty-state">No customers found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section class="add-card">
+            <h2>Update Customer</h2>
+            <form method="post" action="/helpers/admin/customers/update">
+                <div class="form-grid">
+                    <div>
+                        <label for="customer-username">Username <button type="button" class="field-help" data-tip="Customer username to update.">?</button></label>
+                        <input type="text" id="customer-username" name="username" required>
+                    </div>
+                    <div>
+                        <label for="customer-name">Full Name <button type="button" class="field-help" data-tip="Customer display name.">?</button></label>
+                        <input type="text" id="customer-name" name="full_name" required>
+                    </div>
+                    <div>
+                        <label for="customer-email">Email <button type="button" class="field-help" data-tip="Primary email for the customer.">?</button></label>
+                        <input type="email" id="customer-email" name="contact_email" required>
+                    </div>
+                    <div>
+                        <label for="customer-verified">Email Verified <button type="button" class="field-help" data-tip="Set whether the customer email is verified.">?</button></label>
+                        <select id="customer-verified" name="email_verified">
+                            <option value="">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="customer-password">New Password <button type="button" class="field-help" data-tip="Leave blank to keep the current password.">?</button></label>
+                        <input type="password" id="customer-password" name="new_password" placeholder="Leave blank to keep current">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="cta-btn">Update Customer</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="add-card" style="margin-top: 1.8rem;">
+            <h2>Add Customer</h2>
+            <form method="post" action="/helpers/admin/customers">
+                <div class="form-grid">
+                    <div>
+                        <label for="new-customer-username">Username <button type="button" class="field-help" data-tip="Username for the new customer.">?</button></label>
+                        <input type="text" id="new-customer-username" name="username" required>
+                    </div>
+                    <div>
+                        <label for="new-customer-password">Password <button type="button" class="field-help" data-tip="Temporary password for the customer.">?</button></label>
+                        <input type="password" id="new-customer-password" name="password" required>
+                    </div>
+                    <div>
+                        <label for="new-customer-name">Full Name <button type="button" class="field-help" data-tip="Display name for the customer.">?</button></label>
+                        <input type="text" id="new-customer-name" name="full_name" required>
+                    </div>
+                    <div>
+                        <label for="new-customer-email">Email <button type="button" class="field-help" data-tip="Primary email for the customer.">?</button></label>
+                        <input type="email" id="new-customer-email" name="contact_email" required>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="cta-btn">Create Customer</button>
+                </div>
+            </form>
+        </section>
+    </div>
+    <script>
+        const navLinks = document.getElementById('navLinks');
+        function toggleMenu() {
+            navLinks.classList.toggle('active');
+        }
+
+        document.addEventListener('click', (event) => {
+            if (!document.querySelector('header').contains(event.target) && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

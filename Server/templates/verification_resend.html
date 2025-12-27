@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Helper | Verify Email</title>
+    <script>
+        (function() {
+            const match = document.cookie.match(/(?:^|; )theme=([^;]+)/);
+            const theme = match ? decodeURIComponent(match[1]) : "";
+            if (theme === "dark") {
+                document.documentElement.classList.add("dark");
+            }
+        })();
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 0.8rem;
+        }
+
+        p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .notice {
+            background: rgba(56, 161, 105, 0.15);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            color: #2f855a;
+            margin-bottom: 1rem;
+        }
+
+        .error {
+            background: rgba(246, 71, 71, 0.15);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            color: #c0392b;
+            margin-bottom: 1rem;
+        }
+
+        form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #777;
+        }
+
+        .field-help {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            margin-left: 0.4rem;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.18);
+            color: #4c5bd4;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: help;
+        }
+
+        input {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            padding: 0.8rem 1rem;
+            font-size: 1rem;
+        }
+
+        button {
+            margin-top: 0.5rem;
+            padding: 0.9rem 1rem;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .links {
+            margin-top: 1.5rem;
+        }
+
+        .links a {
+            color: #667eea;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        html.dark body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+        }
+
+        html.dark .card {
+            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        html.dark h1 {
+            color: #8aa2ff;
+        }
+
+        html.dark p,
+        html.dark label {
+            color: #cbd5f5;
+        }
+
+        html.dark input {
+            background: #0f172a;
+            border-color: rgba(148, 163, 184, 0.4);
+            color: #e2e8f0;
+        }
+
+        html.dark .notice {
+            background: rgba(45, 212, 191, 0.18);
+            color: #99f6e4;
+        }
+
+        html.dark .error {
+            background: rgba(248, 113, 113, 0.2);
+            color: #fecaca;
+        }
+
+        html.dark .links a {
+            color: #a5b4fc;
+        }
+
+        html.dark .field-help {
+            background: rgba(148, 163, 184, 0.22);
+            color: #e2e8f0;
+        }
+    
+        .field-help {
+            position: relative;
+            border: none;
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+            font-family: inherit;
+        }
+
+        .field-help::after {
+            content: attr(data-tip);
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 8px);
+            transform: translateX(-50%) translateY(4px);
+            background: rgba(15, 23, 42, 0.95);
+            color: #f8fafc;
+            padding: 0.45rem 0.6rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: normal;
+            width: max-content;
+            max-width: 240px;
+            text-align: left;
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 20;
+        }
+
+        .field-help:hover::after,
+        .field-help:focus::after,
+        .field-help:focus-visible::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        html.dark .field-help::after {
+            background: rgba(226, 232, 240, 0.95);
+            color: #0f172a;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Verify your email</h1>
+        <p>We need to verify your email before you can log in. We will send a verification code to your inbox.</p>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        {% if notice %}
+        <div class="notice">{{ notice }}</div>
+        {% endif %}
+
+        <form method="post" action="/verify/resend">
+            <input type="hidden" name="role" value="{{ role }}">
+            <input type="hidden" name="auto_login" value="{{ auto_login or '' }}">
+            <div>
+                <label for="username">Username <button type="button" class="field-help" data-tip="Enter the username for this account.">?</button></label>
+                <input id="username" name="username" type="text" value="{{ username }}" required>
+            </div>
+            <div>
+                <label for="email">Email <button type="button" class="field-help" data-tip="Email address where we should send the code.">?</button></label>
+                <input id="email" name="email" type="email" value="{{ email }}" required>
+            </div>
+            <button type="submit">Send verification code</button>
+        </form>
+
+        <form method="post" action="/verify/confirm" style="margin-top: 1.5rem;">
+            <input type="hidden" name="role" value="{{ role }}">
+            <input type="hidden" name="auto_login" value="{{ auto_login or '' }}">
+            <div>
+                <input id="confirm-username" name="username" type="hidden" value="{{ username }}">
+            </div>
+            <div>
+                <label for="verify-code">Verification code <button type="button" class="field-help" data-tip="Enter the 6-digit code from your email.">?</button></label>
+                <input id="verify-code" name="code" type="text" inputmode="numeric" placeholder="Enter the code from your email" required>
+            </div>
+            <button type="submit">Confirm code</button>
+        </form>
+
+        <div class="links">
+            {% if role == 'helper' %}
+                <a href="/helpers">Back to helper login</a>
+            {% else %}
+                <a href="/customers">Back to customer login</a>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        const usernameInput = document.getElementById('username');
+        const confirmUsername = document.getElementById('confirm-username');
+        const verifyForm = document.querySelector('form[action="/verify/confirm"]');
+        const codeInput = document.getElementById('verify-code');
+
+        function syncUsername() {
+            if (confirmUsername && usernameInput) {
+                confirmUsername.value = usernameInput.value || confirmUsername.value;
+            }
+        }
+
+        if (usernameInput) {
+            usernameInput.addEventListener('input', syncUsername);
+        }
+        if (verifyForm) {
+            verifyForm.addEventListener('submit', () => {
+                syncUsername();
+            });
+        }
+
+        if (codeInput && (new URLSearchParams(window.location.search)).get('notice')) {
+            codeInput.focus();
+        }
+    </script>
+</body>
+</html>

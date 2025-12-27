@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Helper | Email Verification</title>
+    <script>
+        (function() {
+            const match = document.cookie.match(/(?:^|; )theme=([^;]+)/);
+            const theme = match ? decodeURIComponent(match[1]) : "";
+            if (theme === "dark") {
+                document.documentElement.classList.add("dark");
+            }
+        })();
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 0.8rem;
+        }
+
+        p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .badge.success {
+            background: rgba(56, 161, 105, 0.15);
+            color: #2f855a;
+        }
+
+        .badge.error {
+            background: rgba(246, 71, 71, 0.15);
+            color: #c0392b;
+        }
+
+        a.button {
+            display: inline-block;
+            padding: 0.9rem 1.2rem;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .secondary {
+            margin-left: 0.6rem;
+            color: #667eea;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        html.dark body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+        }
+
+        html.dark .card {
+            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        html.dark h1 {
+            color: #e2e8f0;
+        }
+
+        html.dark p {
+            color: #cbd5f5;
+        }
+
+        html.dark .badge.success {
+            background: rgba(45, 212, 191, 0.18);
+            color: #99f6e4;
+        }
+
+        html.dark .badge.error {
+            background: rgba(248, 113, 113, 0.2);
+            color: #fecaca;
+        }
+
+        html.dark .secondary {
+            color: #a5b4fc;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        {% if success %}
+            <span class="badge success">Verified</span>
+            <h1>Email verified</h1>
+        {% else %}
+            <span class="badge error">Verification failed</span>
+            <h1>Unable to verify</h1>
+        {% endif %}
+        <p>{{ message }}</p>
+        <a class="button" href="{{ login_url }}">Go to login</a>
+        <a class="secondary" href="/verify/resend?role={{ role }}">Resend code</a>
+    </div>
+</body>
+</html>

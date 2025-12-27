@@ -1,0 +1,14 @@
+TITLE: Platform Disclaimer
+EFFECTIVE_DATE:
+COMPANY_NAME:
+WEBSITE_URL:
+CONTACT_EMAIL:
+
+1. Platform Role
+- Marketplace only, not the service provider.
+
+2. No Guarantees
+- No guarantee on outcomes or user claims.
+
+3. Third-Party Services
+- Stripe and Checkr role.

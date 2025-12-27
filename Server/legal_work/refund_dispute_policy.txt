@@ -1,0 +1,17 @@
+TITLE: Refund & Dispute Policy
+EFFECTIVE_DATE:
+COMPANY_NAME:
+WEBSITE_URL:
+CONTACT_EMAIL:
+
+1. Payment Flow
+- When funds are captured and released.
+
+2. Refund Eligibility
+- Scenarios for refunds.
+
+3. Dispute Process
+- How users submit disputes and response timeline.
+
+4. Chargebacks
+- Handling and documentation.
